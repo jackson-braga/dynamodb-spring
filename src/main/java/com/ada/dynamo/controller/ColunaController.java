@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class ColunaController {
     private final ColunaRepository repository;
 
-    @PostMapping("/{quadroId}")
-    public ResponseEntity<Coluna> addColuna(@PathVariable String quadroId, @RequestBody Coluna coluna) {
-        return ResponseEntity.ok(repository.save(quadroId, coluna));
-    }
+//    @PostMapping("/{quadroId}")
+//    public ResponseEntity<Coluna> addColuna(@PathVariable String quadroId, @RequestBody Coluna coluna) {
+//        return ResponseEntity.ok(repository.save(coluna, quadroId));
+  //  }
 }
