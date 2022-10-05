@@ -1,5 +1,7 @@
 package com.ada.dynamo.model;
 
+import com.ada.dynamo.enums.Prioridade;
+import com.ada.dynamo.enums.Tipo;
 import com.ada.dynamo.util.autogenerate.LocalDateTimeAutoGenerate;
 import com.ada.dynamo.util.converter.LocalDateTimeToStringConverter;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
@@ -13,7 +15,8 @@ public class CartaoTarefa {
     @DynamoDBHashKey
     private String id;
     @DynamoDBRangeKey
-    private String tipo;
+    @DynamoDBTypeConvertedEnum
+    private Tipo tipo = Tipo.CARTAO_TAREFA;
     private String titulo;
     private String descricao;
     @DynamoDBTypeConvertedEnum
