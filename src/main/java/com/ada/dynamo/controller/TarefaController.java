@@ -18,7 +18,7 @@ public class TarefaController {
 
     @PostMapping
     public ResponseEntity<Tarefa> addTarefa(@RequestBody Tarefa tarefa) {
-        return ResponseEntity.ok(repository.save(tarefa, Tarefa.class));
+        return ResponseEntity.ok(repository.save(tarefa, tarefa.getId()));
     }
 
     @GetMapping("/{id}")
@@ -29,5 +29,11 @@ public class TarefaController {
     @GetMapping
     public ResponseEntity<Iterable<Tarefa>> index() {
         return ResponseEntity.ok(repository.findAll());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTarefa(@PathVariable UUID id) {
+        repository.deleteById(id.toString());
+        return ResponseEntity.noContent().build();
     }
 }
