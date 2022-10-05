@@ -3,16 +3,15 @@ package com.ada.dynamo.repository;
 import com.ada.dynamo.config.DynamoDBGenerateAtInsert;
 import com.ada.dynamo.model.DynamoDBEntity;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
 
@@ -39,7 +38,12 @@ public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
     }
 
     public void deleteById(String id) {
-        var keyMap = Map.of("id", new AttributeValue(id));
+
+        var idField = Arrays.stream(entityType.getDeclaredFields())
+                .filter(f -> f.isAnnotationPresent(DynamoDBHashKey.class))
+                .findFirst().orElseThrow(NoSuchElementException::new);
+
+        var keyMap = Map.of(idField.getName(), new AttributeValue(id));
 
         var deleteItemRequest = new DeleteItemRequest()
                 .withTableName(tableName)
@@ -51,12 +55,12 @@ public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
     public void deleteById(String id, String sortId) {
 
         var idField = Arrays.stream(entityType.getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(null))
-                .findFirst().orElseThrow();
+                .filter(f -> f.isAnnotationPresent(DynamoDBHashKey.class))
+                .findFirst().orElseThrow(NoSuchElementException::new);
 
         var sortIdField = Arrays.stream(entityType.getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(null))
-                .findFirst().orElseThrow();
+                .filter(f -> f.isAnnotationPresent(DynamoDBRangeKey.class))
+                .findFirst().orElseThrow(NoSuchElementException::new);
 
 
         var keyMap = Map.of(
