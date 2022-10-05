@@ -17,6 +17,6 @@ public class QuadroController {
 
     @PostMapping
     public ResponseEntity<Quadro> addQuadro(@RequestBody Quadro quadro){
-        return ResponseEntity.ok(repository.save(quadro));
+        return ResponseEntity.ok(repository.save(quadro, Quadro.class, ""));
     }
 }

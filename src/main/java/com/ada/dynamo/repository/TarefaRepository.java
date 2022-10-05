@@ -13,7 +13,7 @@ import java.util.UUID;
 public class TarefaRepository extends RepositoryBase<Tarefa> {
 
     public TarefaRepository(AmazonDynamoDB mapper) {
-        super(mapper, Tarefa.class);
+        super(mapper, Tarefa.class, "tarefas");
     }
 
     @Override

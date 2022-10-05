@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest;
 import lombok.SneakyThrows;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,30 +15,25 @@ public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
 
     private final AmazonDynamoDB dynamoDBClient;
     private final Class<TEntity> entityType;
+    private final String tableName;
 
-    public RepositoryBase(AmazonDynamoDB mapper, Class<TEntity> entityType) {
+    public RepositoryBase(AmazonDynamoDB mapper, Class<TEntity> entityType, String tableName) {
         this.dynamoDBClient = mapper;
         this.entityType = entityType;
+        this.tableName = tableName;
     }
 
     @SneakyThrows
     public TEntity save(TEntity entity, Class<TEntity> entityType, String... keyParameters) {
-        var request = new PutItemRequest();
-        request.setTableName("tarefas");
 
-        var hashMap = new HashMap<String, AttributeValue>();
         var fields = entityType.getDeclaredFields();
+        var hashMap = new HashMap<String, AttributeValue>();
 
-        for (var field : fields) {
-            var a = entity.getClass();
-            var b = a.getField(field.getName()).get(entity);
-            hashMap.put(field.getName(), new AttributeValue(String.valueOf(b)));
-        }
-
-
-
-        dynamoDBClient.putItem(request);
+        setItemValues(entity, entityType, fields, hashMap);
         entity.setId(onGenerateKey(keyParameters));
+
+        dynamoDBClient.putItem(tableName, hashMap);
+
         return entity;
     }
 
@@ -60,4 +56,14 @@ public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
     }
 
     protected abstract String onGenerateKey(String... params);
+
+    private void setItemValues(TEntity entity, Class<TEntity> entityType, Field[] fields, HashMap<String, AttributeValue> hashMap)
+            throws NoSuchFieldException, IllegalAccessException {
+        for (var declaredField : fields) {
+            var field = entityType.getDeclaredField(declaredField.getName());
+            field.setAccessible(true);
+            var value = field.get(entity);
+            hashMap.put(declaredField.getName(), new AttributeValue(String.valueOf(value)));
+        }
+    }
 }

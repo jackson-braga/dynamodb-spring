@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class ColunaRepository extends RepositoryBase<Coluna> {
 
     public ColunaRepository(AmazonDynamoDB mapper) {
-        super(mapper, Coluna.class);
+        super(mapper, Coluna.class, "coluna");
     }
 
     @Override
