@@ -18,12 +18,12 @@ public class TarefaController {
 
     @PostMapping
     public ResponseEntity<Tarefa> addTarefa(@RequestBody Tarefa tarefa) {
-        return ResponseEntity.ok(repository.save(tarefa));
+        return ResponseEntity.ok(repository.save(tarefa, Tarefa.class));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Tarefa> show(@PathVariable UUID id) {
-        return ResponseEntity.ok(repository.findById(id));
+        return ResponseEntity.ok(repository.findById(id.toString()));
     }
 
     @GetMapping
