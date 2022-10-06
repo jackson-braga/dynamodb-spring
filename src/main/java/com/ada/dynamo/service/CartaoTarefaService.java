@@ -30,6 +30,14 @@ public class CartaoTarefaService {
         return repository.save(cartaoTarefa);
     }
 
+    public CartaoTarefa changeColumn(String cartaoTarefaId, String colunaId) {
+        CartaoTarefa cartaoTarefa = findById(cartaoTarefaId);
+        delete(cartaoTarefaId);
+        String idCartao = cartaoTarefaId.split("_")[2];
+        cartaoTarefa.setId(colunaId.concat("_" + idCartao));
+        return repository.save(cartaoTarefa);
+    }
+
     public List<CartaoTarefa> getAll() {
         return repository.getAll();
     }
