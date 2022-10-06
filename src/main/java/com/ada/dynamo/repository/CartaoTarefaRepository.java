@@ -1,5 +1,6 @@
 package com.ada.dynamo.repository;
 
+import com.ada.dynamo.dto.CartaoTarefaAddRequest;
 import com.ada.dynamo.model.CartaoTarefa;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -20,9 +21,8 @@ public class CartaoTarefaRepository {
 
     private static final String TIPO = "tarefa";
 
-    public CartaoTarefa save(String quadroId, String colunaId, CartaoTarefa tarefa) {
-        tarefa.setId(quadroId + "#" + colunaId + "#" + UUID.randomUUID());
-        tarefa.setTipo(TIPO);
+    public CartaoTarefa save(CartaoTarefaAddRequest dto) {
+        CartaoTarefa tarefa = convertDtoToModel(dto);
         mapper.save(tarefa);
         return tarefa;
     }
@@ -53,5 +53,17 @@ public class CartaoTarefaRepository {
 
     public void delete(String id) {
         mapper.delete(findById(id));
+    }
+
+    private  CartaoTarefa convertDtoToModel(CartaoTarefaAddRequest dto) {
+        CartaoTarefa cartaoTarefa = new CartaoTarefa();
+        cartaoTarefa.setId(dto.getQuadroId() + "#" + dto.getColunaId() + "#" + UUID.randomUUID());
+        cartaoTarefa.setConclusao(dto.getConclusao());
+        cartaoTarefa.setTipo(TIPO);
+        cartaoTarefa.setPrevisao(dto.getPrevisao());
+        cartaoTarefa.setDescricao(dto.getDescricao());
+        cartaoTarefa.setTitulo(dto.getTitulo());
+
+        return cartaoTarefa;
     }
 }

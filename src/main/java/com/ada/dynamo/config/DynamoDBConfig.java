@@ -19,9 +19,9 @@ import org.springframework.context.event.EventListener;
 
 @Configuration
 public class DynamoDBConfig {
-    @Value("${aws.access.key.id:fakeid}")
+    @Value("${aws.access.key.id:lnhqbb}")
     private String awsAccessKeyId;
-    @Value("${aws.access.key.secret:fakeSecret}")
+    @Value("${aws.access.key.secret:6mkfv}")
     private String awsAcessKeySecret;
     @Value("${dynamodb.service.endpoint:http://localhost:8000/}")
     private String dynamoDBServiceEndPoint;
