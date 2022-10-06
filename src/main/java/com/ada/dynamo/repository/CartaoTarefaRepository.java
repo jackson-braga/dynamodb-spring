@@ -1,16 +1,15 @@
 package com.ada.dynamo.repository;
 
 import com.ada.dynamo.model.CartaoTarefa;
-import com.ada.dynamo.model.Coluna;
-import com.ada.dynamo.model.Tarefa;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,8 +17,8 @@ public class CartaoTarefaRepository {
 
     private final DynamoDBMapper mapper;
 
-    public CartaoTarefa save(String quadroId, String colunaId, CartaoTarefa cartaoTarefa) {
-        cartaoTarefa.setId(quadroId+"#" + colunaId + "#"+ UUID.randomUUID().toString());
+    public CartaoTarefa save(String colunaId, String tarefaId, CartaoTarefa cartaoTarefa) {
+        cartaoTarefa.setId(String.format("%s#%s", colunaId, tarefaId));
         mapper.save(cartaoTarefa);
         return cartaoTarefa;
     }
@@ -32,7 +31,14 @@ public class CartaoTarefaRepository {
         return Optional.ofNullable(mapper.load(CartaoTarefa.class, id, "CARTAO_TAREFA"));
     }
 
-    public Iterable<CartaoTarefa> findAll(){
-        return new ArrayList<>(mapper.scan(CartaoTarefa.class, new DynamoDBScanExpression()));
+    public Iterable<CartaoTarefa> findAll() {
+        Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":tipo", new AttributeValue().withS("CARTAO_TAREFA"));
+
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                .withFilterExpression("tipo = :tipo")
+                .withExpressionAttributeValues(eav);
+
+        return mapper.scan(CartaoTarefa.class, scanExpression);
     }
 }
