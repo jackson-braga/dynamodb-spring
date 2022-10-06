@@ -2,6 +2,7 @@ package com.ada.dynamo.controller;
 
 import com.ada.dynamo.dto.request.CartaoTarefaRequest;
 import com.ada.dynamo.model.CartaoTarefa;
+import com.ada.dynamo.model.Tarefa;
 import com.ada.dynamo.service.CartaoTarefaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,14 @@ public class CartaoTarefaController {
 
     private final CartaoTarefaService service;
 
-    @PostMapping("{id}")
-    public ResponseEntity<CartaoTarefa> addTarefa(@PathVariable(name ="id") String quadroColunaId, @RequestBody CartaoTarefaRequest cartaoTarefaRequest) {
-        return ResponseEntity.ok(service.save(quadroColunaId, cartaoTarefaRequest));
+    @PostMapping("/{cartaoTarefaId}/{quadroColunaId}")
+    public ResponseEntity<CartaoTarefa> addTarefaNaColuna(@PathVariable String cartaoTarefaId, @PathVariable String quadroColunaId) {
+        return ResponseEntity.ok(service.save(cartaoTarefaId, quadroColunaId));
+    }
+
+    @PostMapping()
+    public ResponseEntity<Tarefa> addTarefa(@RequestBody @Valid CartaoTarefaRequest cartaoTarefaRequest) {
+        return ResponseEntity.ok(service.save(cartaoTarefaRequest));
     }
 
     @GetMapping("/{id}")

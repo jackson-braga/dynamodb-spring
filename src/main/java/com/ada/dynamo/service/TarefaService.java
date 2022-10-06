@@ -1,8 +1,5 @@
-package com.ada.dynamo.service;
+/*package com.ada.dynamo.service;
 
-import com.ada.dynamo.dto.request.TarefaRequest;
-import com.ada.dynamo.mapper.TarefaMapper;
-import com.ada.dynamo.model.Coluna;
 import com.ada.dynamo.model.Tarefa;
 import com.ada.dynamo.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,12 @@ public class TarefaService {
         return repository.save(tarefa);
     }
 
+    public Tarefa update(String tarefaId, TarefaRequest tarefaRequest){
+        Tarefa tarefa = mapper.toModel(tarefaRequest);
+        tarefa.setId(tarefaId);
+        return repository.save(tarefa);
+    }
+
     public List<Tarefa> getAll() {
         return repository.getAll();
     }
@@ -35,4 +38,4 @@ public class TarefaService {
     public void delete(String id) {
         repository.delete(id);
     }
-}
+}*/
