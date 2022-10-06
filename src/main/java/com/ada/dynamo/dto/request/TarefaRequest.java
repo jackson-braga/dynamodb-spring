@@ -1,8 +1,4 @@
-package com.ada.dynamo.dto.response;
-
-import com.ada.dynamo.model.Prioridade;
-import lombok.Getter;
-import lombok.Setter;
+package com.ada.dynamo.dto.request;
 
 import java.time.LocalDateTime;
 

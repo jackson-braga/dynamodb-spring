@@ -8,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
 import lombok.Data;
 
+import javax.swing.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -32,4 +33,6 @@ public class Tarefa implements DynamoDBEntity {
 
     @DynamoDBGenerateAtInsert(type = LocalDateTime.class)
     private LocalDateTime conclusao;
+
+
 }
