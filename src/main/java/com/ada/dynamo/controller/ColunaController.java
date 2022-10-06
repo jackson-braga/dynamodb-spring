@@ -2,9 +2,7 @@ package com.ada.dynamo.controller;
 
 import com.ada.dynamo.dto.request.ColunaRequest;
 import com.ada.dynamo.model.Coluna;
-import com.ada.dynamo.repository.ColunaRepository;
 import com.ada.dynamo.service.ColunaService;
-import com.amazonaws.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

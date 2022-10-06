@@ -1,5 +1,6 @@
 package com.ada.dynamo.repository;
 
+import com.ada.dynamo.dto.request.CartaoTarefaRequest;
 import com.ada.dynamo.model.CartaoTarefa;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 @Repository
 public class CartaoTarefaRepository extends AbstractRepository<CartaoTarefa, String>{
+
     public CartaoTarefaRepository(DynamoDBMapper mapper) {
         super(mapper);
     }
