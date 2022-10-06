@@ -1,6 +1,5 @@
 package com.ada.dynamo.infrastructure.repository.dynamo;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDeleteExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
@@ -55,8 +54,8 @@ public abstract class DynamoDbCrud<T> {
     public T update(T t) {
         DynamoDBSaveExpression saveExpression = new DynamoDBSaveExpression();
         Map<String, ExpectedAttributeValue> expectedAttributes = new HashMap<>();
-        expectedAttributes.put("hashKey", new ExpectedAttributeValue(true));
-        expectedAttributes.put("rangeKey", new ExpectedAttributeValue(true));
+        expectedAttributes.put("hashKey", new ExpectedAttributeValue(false));
+        expectedAttributes.put("rangeKey", new ExpectedAttributeValue(false));
 
         saveExpression.setExpected(expectedAttributes);
         saveExpression.setConditionalOperator(ConditionalOperator.AND);
