@@ -20,4 +20,25 @@ public class CartaoTarefaController {
                                                   @RequestBody CartaoTarefa tarefa) {
         return ResponseEntity.ok(repository.save(quadroId, colunaId, tarefa));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CartaoTarefa> getById(@PathVariable String id){
+        return ResponseEntity.ok(repository.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<CartaoTarefa>> getAll() {
+        return ResponseEntity.ok(repository.findAll());
+    }
+
+    @PutMapping
+    public ResponseEntity<CartaoTarefa> update(@RequestBody CartaoTarefa tarefa) {
+        return ResponseEntity.ok(repository.update(tarefa));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CartaoTarefa> delete(@PathVariable String id) {
+        repository.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

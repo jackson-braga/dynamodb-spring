@@ -14,8 +14,8 @@ public class CartaoTarefaRepository {
 
     private final DynamoDBMapper mapper;
 
-    public CartaoTarefa save(String quadroId, String colunaId, CartaoTarefa tarefa) {
-        tarefa.setId(quadroId + "#" + colunaId + "#" + UUID.randomUUID());
+    public CartaoTarefa save(String tarefaId, String colunaId, CartaoTarefa tarefa) {
+        tarefa.setId(tarefaId + "#" + colunaId + "#" + UUID.randomUUID());
         mapper.save(tarefa);
         return tarefa;
     }
@@ -26,5 +26,16 @@ public class CartaoTarefaRepository {
 
     public Iterable<CartaoTarefa> findAll() {
         return mapper.scan(CartaoTarefa.class, new DynamoDBScanExpression());
+    }
+
+    public CartaoTarefa update(CartaoTarefa tarefa) {
+
+        findById(tarefa.getId());
+        mapper.save(tarefa);
+        return tarefa;
+    }
+
+    public void delete(String id) {
+        mapper.delete(findById(id));
     }
 }
