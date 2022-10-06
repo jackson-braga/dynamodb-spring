@@ -1,16 +1,13 @@
 package com.ada.dynamo.repository;
 
 import com.ada.dynamo.model.Tarefa;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,7 +25,8 @@ public class TarefaRepository {
     }
 
     public Iterable<Tarefa> findAll() {
-        return new ArrayList<>(mapper.scan(Tarefa.class, new DynamoDBScanExpression()));
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+        return mapper.scan(Tarefa.class, scanExpression);
     }
 
     public void delete(Tarefa entity) {

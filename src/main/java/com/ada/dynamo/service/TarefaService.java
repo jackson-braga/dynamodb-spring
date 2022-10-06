@@ -6,11 +6,11 @@ import com.ada.dynamo.exception.ItemNaoEncontradoException;
 import com.ada.dynamo.model.Tarefa;
 import com.ada.dynamo.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +20,13 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
     @Override
     public TarefaResponse findById(String id) {
-        var tarefa = repository.findById(id.toString()).orElseThrow(
-            () -> new ItemNaoEncontradoException(String.format("Sem tarefa encontrada para o id %s", id))
-        );
-
+        Tarefa tarefa = findModelById(id);
         return mapToResponse(tarefa);
+    }
+
+    public Tarefa findModelById(String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ItemNaoEncontradoException(String.format("Tarefa com id %s não encontrada", id)));
     }
 
     @Override
@@ -47,36 +49,19 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
     @Override
     public void delete(String id) {
-        var tarefa = repository.findById(id).orElseThrow(
-            () -> new ItemNaoEncontradoException(String.format("Tarefa com id %s não econtrado para deleção", id))
-        );
+        var tarefa = findModelById(id);
         repository.delete(tarefa);
     }
 
     private TarefaResponse mapToResponse(Tarefa tarefa) {
         var tarefaResponse = new TarefaResponse();
-
-        tarefaResponse.setId(tarefa.getId());
-        tarefaResponse.setTitulo(tarefa.getTitulo());
-        tarefaResponse.setDescricao(tarefa.getDescricao());
-        tarefaResponse.setPrioridade(tarefa.getPrioridade());
-        tarefaResponse.setCriacao(tarefa.getCriacao());
-        tarefaResponse.setPrevisao(tarefa.getPrevisao());
-        tarefaResponse.setConclusao(tarefa.getConclusao());
-
+        BeanUtils.copyProperties(tarefa, tarefaResponse);
         return tarefaResponse;
     }
 
-    private Tarefa mapToModel(TarefaRequest request) {
+    private Tarefa mapToModel(TarefaRequest tarefaRequest) {
         var tarefa = new Tarefa();
-
-        tarefa.setTitulo(request.getTitulo());
-        tarefa.setDescricao(request.getDescricao());
-        tarefa.setPrioridade(request.getPrioridade());
-        tarefa.setCriacao(request.getCriacao());
-        tarefa.setPrevisao(request.getPrevisao());
-        tarefa.setConclusao(request.getConclusao());
-
+        BeanUtils.copyProperties(tarefaRequest, tarefa);
         return tarefa;
     }
 }

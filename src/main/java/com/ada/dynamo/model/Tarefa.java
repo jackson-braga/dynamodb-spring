@@ -1,14 +1,9 @@
 package com.ada.dynamo.model;
 
-
-import com.ada.dynamo.config.DynamoDBGenerateAtInsert;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
+import com.ada.dynamo.util.converter.LocalDateTimeToStringConverter;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import lombok.Data;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,21 +13,18 @@ public class Tarefa implements DynamoDBEntity {
     @DynamoDBHashKey
     private String id;
 
-    @DynamoDBRangeKey
     private String titulo;
     private String descricao;
 
     @DynamoDBTypeConvertedEnum
     private Prioridade prioridade;
 
-    @DynamoDBGenerateAtInsert(type = LocalDateTime.class)
+    @DynamoDBTypeConverted(converter = LocalDateTimeToStringConverter.class)
     private LocalDateTime criacao;
 
-    @DynamoDBGenerateAtInsert(type = LocalDateTime.class)
+    @DynamoDBTypeConverted(converter = LocalDateTimeToStringConverter.class)
     private LocalDateTime previsao;
 
-    @DynamoDBGenerateAtInsert(type = LocalDateTime.class)
+    @DynamoDBTypeConverted(converter = LocalDateTimeToStringConverter.class)
     private LocalDateTime conclusao;
-
-
 }
