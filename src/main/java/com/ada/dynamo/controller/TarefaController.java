@@ -34,9 +34,9 @@ public class TarefaController {
         return ResponseEntity.ok(repository.findAll());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTarefa(@PathVariable UUID id) {
-        repository.deleteById(id.toString());
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteTarefa(@PathVariable UUID id) {
+//        repository.deleteById(id.toString());
+//        return ResponseEntity.noContent().build();
+//    }
 }
