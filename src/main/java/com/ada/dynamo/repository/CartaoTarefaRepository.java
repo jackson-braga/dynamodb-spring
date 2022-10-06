@@ -22,6 +22,7 @@ public class CartaoTarefaRepository {
 
     public CartaoTarefa save(String tarefaId, String colunaId, CartaoTarefa tarefa) {
         tarefa.setId(tarefaId + "#" + colunaId + "#" + UUID.randomUUID());
+        tarefa.setTipo(TIPO);
         mapper.save(tarefa);
         return tarefa;
     }
