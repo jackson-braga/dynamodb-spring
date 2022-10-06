@@ -11,7 +11,11 @@ import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
 
@@ -64,8 +68,8 @@ public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
 
 
         var keyMap = Map.of(
-                idField.getName(), new AttributeValue(id),
-                sortIdField.getName(), new AttributeValue(sortId)
+            idField.getName(), new AttributeValue(id),
+            sortIdField.getName(), new AttributeValue(sortId)
         );
 
         var deleteItemRequest = new DeleteItemRequest()
@@ -76,7 +80,7 @@ public abstract class RepositoryBase<TEntity extends DynamoDBEntity> {
     }
 
     public TEntity findById(String id, String sortId) {
-        // return dynamoDBClient.load(entityType, id, sortId);
+//        return dynamoDBClient.getItem(entityType, id, sortId);
         return null;
     }
 

@@ -32,4 +32,10 @@ public class QuadroController {
     public ResponseEntity<List<QuadroResponse>> findAll(){
         return ResponseEntity.ok(service.findAll());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.deleteQuadro(id);
+        return ResponseEntity.noContent().build();
+    }
 }

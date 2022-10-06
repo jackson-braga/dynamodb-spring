@@ -34,4 +34,12 @@ public class QuadroRepository {
 
         return mapper.scan(Quadro.class, scanExpression);
     }
+
+    public Optional<Quadro> findById(String id) {
+        return Optional.ofNullable(mapper.load(Quadro.class, id, "QUADRO"));
+    }
+
+    public void delete(Quadro id) {
+        mapper.delete(id);
+    }
 }
