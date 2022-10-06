@@ -24,7 +24,6 @@ public class ColunaRepository extends AbstractRepository<Coluna,String> {
         var scanDB = new DynamoDBScanExpression()
                 .withFilterExpression("tipo = :tipo")
                 .withExpressionAttributeValues(eav);
-
         return scanDB;
     }
 

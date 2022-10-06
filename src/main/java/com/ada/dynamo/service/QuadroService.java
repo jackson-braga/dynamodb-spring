@@ -22,6 +22,12 @@ public class QuadroService {
         return repository.save(quadro);
     }
 
+    public Quadro update(String id, QuadroRequest quadroRequest){
+        Quadro quadro = mapper.toModel(quadroRequest);
+        quadro.setId(id);
+        return repository.save(quadro);
+    }
+
     public List<Quadro> getAll() {
         return repository.getAll();
     }

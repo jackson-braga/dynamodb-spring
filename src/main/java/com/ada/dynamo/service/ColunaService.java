@@ -18,9 +18,15 @@ public class ColunaService {
     private final ColunaMapper mapper;
 
 
-    public Coluna save(String quadroId, ColunaRequest colunaRequest){
+    public Coluna save(String colunaId, ColunaRequest colunaRequest){
         Coluna coluna = mapper.toModel(colunaRequest);
-        coluna.setId(quadroId + "_" + UUID.randomUUID());
+        coluna.setId(colunaId + "_" + UUID.randomUUID());
+        return repository.save(coluna);
+    }
+
+    public Coluna update(String colunaId, ColunaRequest colunaRequest){
+        Coluna coluna = mapper.toModel(colunaRequest);
+        coluna.setId(colunaId);
         return repository.save(coluna);
     }
 

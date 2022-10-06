@@ -43,6 +43,6 @@ ColunaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Coluna> update(@PathVariable String id, @RequestBody @Valid ColunaRequest colunaRequest) {
-        return ResponseEntity.ok(service.save(id,colunaRequest));
+            return ResponseEntity.ok(service.update(id,colunaRequest));
     }
 }
