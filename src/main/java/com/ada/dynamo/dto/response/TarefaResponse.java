@@ -2,12 +2,14 @@ package com.ada.dynamo.dto.response;
 
 import com.ada.dynamo.model.Prioridade;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class TarefaResponse {
     private String id;
     private String titulo;

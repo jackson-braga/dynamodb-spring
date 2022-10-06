@@ -1,5 +1,10 @@
 package com.ada.dynamo.dto.request;
 
+import com.ada.dynamo.model.Prioridade;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Getter

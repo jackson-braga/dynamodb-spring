@@ -29,4 +29,8 @@ public class TarefaRepository {
     public Iterable<Tarefa> findAll() {
         return new ArrayList<>(mapper.scan(Tarefa.class, new DynamoDBScanExpression()));
     }
+
+    public void deleteById(UUID id) {
+        mapper.delete(findById(id));
+    }
 }
