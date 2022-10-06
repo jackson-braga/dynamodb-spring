@@ -1,7 +1,5 @@
 package com.ada.dynamo.controller;
 
-import com.ada.dynamo.dto.CartaoTarefaAddRequest;
-import com.ada.dynamo.dto.CartaoTarefaRequestById;
 import com.ada.dynamo.model.CartaoTarefa;
 import com.ada.dynamo.repository.CartaoTarefaRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,19 +12,24 @@ import org.springframework.web.bind.annotation.*;
 public class CartaoTarefaController {
     private final CartaoTarefaRepository repository;
 
-    //TODO: Completar CRUD das tarefas
+    //TODO: Parear alterações com as tarefas da tabela "quadros"
 
-     @PostMapping
-    public ResponseEntity<CartaoTarefa> addTarefa(@RequestBody CartaoTarefaAddRequest tarefa) {
-        return ResponseEntity.ok(repository.save(tarefa));
+    @PostMapping("/{quadroId}/{colunaId}")
+    public ResponseEntity<CartaoTarefa> addTarefa(@PathVariable String quadroId,
+                                                  @PathVariable String colunaId,
+                                                  @RequestBody CartaoTarefa tarefa) {
+        return ResponseEntity.ok(repository.save(quadroId, colunaId, tarefa));
+    }
+
+    @GetMapping("/{quadroId}/{colunaId}/{tarefaId}")
+    public ResponseEntity<CartaoTarefa> getById(@PathVariable String quadroId,
+                                                @PathVariable String colunaId,
+                                                @PathVariable String tarefaId) {
+        var id = quadroId + "#" + colunaId + "#" + tarefaId;
+        return ResponseEntity.ok(repository.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<CartaoTarefa> getById(@RequestBody CartaoTarefaRequestById dto){
-        return ResponseEntity.ok(repository.findById(dto.getId()));
-    }
-
-    @GetMapping("/listar")
     public ResponseEntity<Iterable<CartaoTarefa>> getAll() {
         return ResponseEntity.ok(repository.findAll());
     }
@@ -36,9 +39,20 @@ public class CartaoTarefaController {
         return ResponseEntity.ok(repository.update(tarefa));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CartaoTarefa> delete(@RequestBody CartaoTarefaRequestById dto) {
-        repository.delete(dto.getId());
+    @PatchMapping("/{quadroId}/{colunaId}")
+    public ResponseEntity<CartaoTarefa> changeCollumn(@PathVariable String quadroId,
+                                                      @PathVariable String colunaId,
+                                                      @RequestBody CartaoTarefa tarefa) {
+        return ResponseEntity.ok(repository.changeCollumn(quadroId, colunaId, tarefa));
+    }
+
+    @DeleteMapping("/{quadroId}/{colunaId}/{tarefaId}")
+    public ResponseEntity<CartaoTarefa> delete(@PathVariable String quadroId,
+                                               @PathVariable String colunaId,
+                                               @PathVariable String tarefaId) {
+
+        var id = quadroId + "#" + colunaId + "#" + tarefaId;
+        repository.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

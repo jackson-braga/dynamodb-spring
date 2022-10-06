@@ -16,7 +16,6 @@ public class TarefaController {
     private final TarefaRepository repository;
 
     //TODO: Parear alterações com as tarefas da tabela "quadros"
-    //TODO: Adicionar função para alterar status da tarefa
     @PostMapping
     public ResponseEntity<Tarefa> addTarefa(@RequestBody Tarefa tarefa) {
         return ResponseEntity.ok(repository.save(tarefa));
