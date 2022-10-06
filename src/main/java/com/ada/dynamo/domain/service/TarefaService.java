@@ -8,6 +8,7 @@ import com.ada.dynamo.domain.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class TarefaService {
     public Tarefa save(TarefaRequest TarefaRequest) {
         Tarefa tarefa = TarefaMapper.INSTANCE.tarefaRequestToTarefa(TarefaRequest);
         tarefa.setId(UUID.randomUUID().toString());
+        tarefa.setCriacao(LocalDateTime.now());
 
         return tarefaRepository.save(tarefa);
     }
