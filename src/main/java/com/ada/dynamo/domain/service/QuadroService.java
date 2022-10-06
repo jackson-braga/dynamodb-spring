@@ -20,8 +20,6 @@ public class QuadroService {
     private final QuadroRepository quadroRepository;
 
     public Quadro save(QuadroRequest quadroRequest) {
-        // nome do commit? kkkkk
-        // finalizando o projeto kkkkkkkkk
         Quadro quadro = QuadroMapper.INSTANCE.quadroRequestToQuadro(quadroRequest);
         quadro.setId(generateHashKey());
         quadro.setTipo(TIPO);
