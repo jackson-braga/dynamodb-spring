@@ -74,7 +74,7 @@ public abstract class DynamoDbCrud<T> {
         if(item.isEmpty()) {
             throw new RuntimeException("Item nao existente");
         }
-        dynamoDBMapper.delete(item);
+        dynamoDBMapper.delete(item.get());
     }
 
 }

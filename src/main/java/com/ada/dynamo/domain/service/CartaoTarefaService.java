@@ -23,7 +23,6 @@ public class CartaoTarefaService {
 
     public CartaoTarefa save(CreateCartaoTarefaRequest createCartaoTarefaRequest) {
         CartaoTarefa cartaoTarefa = CartaoTarefaMapper.INSTANCE.createCartaoTarefaRequestToCartaoTarefa(createCartaoTarefaRequest);
-        System.out.println(cartaoTarefa.getId());
         cartaoTarefa.setId(generateHashKey(createCartaoTarefaRequest.getColunaId()));
         cartaoTarefa.setTipo("CARTAO_TAREFA");
 

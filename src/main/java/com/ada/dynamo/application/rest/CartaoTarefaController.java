@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/carta-tarefa")
+@RequestMapping("/api/cartao-tarefa")
 @RequiredArgsConstructor
 public class CartaoTarefaController {
 

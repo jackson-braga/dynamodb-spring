@@ -25,4 +25,5 @@ public class Tarefa {
     private LocalDateTime previsao;
     @DynamoDBTypeConverted(converter = LocalDateTimeToStringConverter.class)
     private LocalDateTime conclusao;
+    // TODO: vincular com cartao tarefa
 }

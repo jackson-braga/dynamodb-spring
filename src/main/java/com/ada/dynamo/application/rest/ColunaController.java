@@ -31,6 +31,7 @@ public class ColunaController {
 
     @GetMapping("/{hashKey}")
     public ResponseEntity<ColunaResponse> getPorHashKey(@PathVariable String hashKey) {
+        System.out.println(hashKey);
         Coluna coluna = colunaService.getByHashKeyAndRangeKey(hashKey);
         ColunaResponse response = ColunaMapper.INSTANCE.colunaToColunaResponse(coluna);
 
