@@ -44,6 +44,6 @@ public class CartaoTarefaController {
 
     @PatchMapping("/{idCartaoTarefa}/{idColunaNova}")
     public ResponseEntity<CartaoTarefa> changeColumn(@PathVariable String idCartaoTarefa, @PathVariable String idColunaNova) {
-        return ResponseEntity.ok(service.changeColumn(idCartaoTarefa,idColunaNova));
+        return ResponseEntity.ok(service.changeColuna(idCartaoTarefa,idColunaNova));
     }
 }

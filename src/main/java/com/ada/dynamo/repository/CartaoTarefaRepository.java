@@ -8,7 +8,9 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class CartaoTarefaRepository extends AbstractRepository<CartaoTarefa, String>{
