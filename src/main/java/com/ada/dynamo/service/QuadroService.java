@@ -14,12 +14,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class QuadroService {
+public class QuadroService implements ServiceContract<QuadroRequest, QuadroResponse> {
 
     private final QuadroRepository repository;
 
     public QuadroResponse findById(String id) {
-        var quadro = repository.findById(id)
+        var quadro = repository.findById(id.toString())
             .orElseThrow(() -> new ItemNaoEncontradoException(String.format("Quadro com id %s não encontrado", id)));
 
         return mapToResponse(quadro);
@@ -37,14 +37,14 @@ public class QuadroService {
         return quadroResponses;
      }
 
-    public QuadroResponse createQuadro(QuadroRequest request) {
+    public QuadroResponse create(QuadroRequest request) {
         var quadro = repository.save(mapToModel(request));
 
         return mapToResponse(quadro);
     }
 
-    public void deleteQuadro(UUID id) {
-        var quadro = repository.findById(id.toString()).orElseThrow(
+    public void delete(String id) {
+        var quadro = repository.findById(id).orElseThrow(
             () -> new ItemNaoEncontradoException(String.format("Quadro com id %s não encontrado para deleção", id))
         );
         repository.delete(quadro);

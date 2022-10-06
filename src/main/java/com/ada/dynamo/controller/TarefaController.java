@@ -25,7 +25,7 @@ public class TarefaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TarefaResponse> show(@PathVariable UUID id) {
+    public ResponseEntity<TarefaResponse> show(@PathVariable String id) {
         return ResponseEntity.ok(service.findById(id));
     }
 

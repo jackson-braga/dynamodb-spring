@@ -9,4 +9,5 @@ import lombok.Setter;
 public class QuadroRequest {
     private String tipo;
     private String nome;
+
 }

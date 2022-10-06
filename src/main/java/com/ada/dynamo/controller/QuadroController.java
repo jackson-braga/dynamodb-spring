@@ -2,7 +2,6 @@ package com.ada.dynamo.controller;
 
 import com.ada.dynamo.dto.request.QuadroRequest;
 import com.ada.dynamo.dto.response.QuadroResponse;
-import com.ada.dynamo.model.Quadro;
 import com.ada.dynamo.service.QuadroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class QuadroController {
 
     @PostMapping
     public ResponseEntity<QuadroResponse> addQuadro(@RequestBody QuadroRequest quadroRequest) {
-        return ResponseEntity.ok(service.createQuadro(quadroRequest));
+        return ResponseEntity.ok(service.create(quadroRequest));
     }
 
     @GetMapping(value = "/{id}")
@@ -34,8 +33,8 @@ public class QuadroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.deleteQuadro(id);
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
