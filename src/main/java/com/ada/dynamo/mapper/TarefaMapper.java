@@ -5,6 +5,6 @@ import com.ada.dynamo.model.Tarefa;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface TarefaMapper {
-    Tarefa toModel(TarefaRequest tarefaRequest);
+public interface TarefaMapper extends ToModelMapper<Tarefa, TarefaRequest> {
+Tarefa toModel(TarefaRequest tarefaRequest);
 }

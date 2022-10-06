@@ -7,6 +7,7 @@ import com.ada.dynamo.repository.ColunaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -16,10 +17,23 @@ public class ColunaService {
     private final ColunaRepository repository;
     private final ColunaMapper mapper;
 
-    public Coluna adicionar(String quadroId, ColunaRequest colunaRequest){
+
+    public Coluna save(String quadroId, ColunaRequest colunaRequest){
         Coluna coluna = mapper.toModel(colunaRequest);
-        coluna.setId(quadroId + "#" + UUID.randomUUID());
+        coluna.setId(quadroId + "_" + UUID.randomUUID());
         return repository.save(coluna);
+    }
+
+    public List<Coluna> getAll() {
+        return repository.getAll();
+    }
+
+    public Coluna findById(String id) {
+        return repository.findById(id);
+    }
+
+    public void delete(String id) {
+        repository.delete(id);
     }
 
 }

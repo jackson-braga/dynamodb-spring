@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 public class Tarefa {
     @DynamoDBHashKey
-    private UUID id;
+    private String id;
     @DynamoDBRangeKey
     private String titulo;
     private String descricao;

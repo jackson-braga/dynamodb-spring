@@ -11,24 +11,21 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-@RequiredArgsConstructor
-public class TarefaRepository {
 
-    private final DynamoDBMapper mapper;
+public class TarefaRepository extends AbstractRepository<Tarefa,String> {
 
-    public Tarefa save(Tarefa tarefa) {
-        tarefa.setId(UUID.randomUUID());
-        mapper.save(tarefa);
-        return tarefa;
+    public TarefaRepository(DynamoDBMapper mapper) {
+        super(mapper);
     }
 
-    public Tarefa findById(UUID id) {
-        return mapper.load(Tarefa.class, id);
+    @Override
+    protected DynamoDBScanExpression getDynamoDBScanExpression() {
+        //TODO: implementar método
+        return null;
     }
 
-    public Iterable<Tarefa> findAll() {
-        return mapper.scan(Tarefa.class, new DynamoDBScanExpression())
-                .stream()
-                .collect(Collectors.toList());
+    @Override
+    protected Class<Tarefa> getClassType() {
+        return Tarefa.class;
     }
 }
