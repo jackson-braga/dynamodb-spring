@@ -40,7 +40,6 @@ public class ColunaController {
     @PostMapping
     public ResponseEntity<ColunaResponse> cadastrar(@RequestBody @Valid CreateColunaRequest createColunaRequest) {
         Coluna coluna = colunaService.save(createColunaRequest);
-        System.out.println(coluna);
         ColunaResponse response = ColunaMapper.INSTANCE.colunaToColunaResponse(coluna);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
