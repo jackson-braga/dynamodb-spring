@@ -6,9 +6,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,13 +21,25 @@ public class TarefaRepository {
         return tarefa;
     }
 
-    public Tarefa findById(UUID id) {
-        return mapper.load(Tarefa.class, id);
+    public Tarefa update(Tarefa tarefa) {
+        findById(tarefa.getId());
+        mapper.save(tarefa);
+        return tarefa;
     }
 
+    public void delete(UUID id) {
+        mapper.delete(findById(id));
+    }
+
+    public Tarefa findById(UUID id) {
+        var entity = mapper.load(Tarefa.class, id);
+        if (Objects.nonNull(entity))
+            return entity;
+        throw new RuntimeException("Item not found!");
+    }
+
+
     public Iterable<Tarefa> findAll() {
-        return mapper.scan(Tarefa.class, new DynamoDBScanExpression())
-                .stream()
-                .collect(Collectors.toList());
+        return mapper.scan(Tarefa.class, new DynamoDBScanExpression());
     }
 }

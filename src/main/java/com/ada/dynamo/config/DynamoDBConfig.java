@@ -58,7 +58,7 @@ public class DynamoDBConfig {
         DynamoDBMapper dynamoDBMapper = event.getApplicationContext().getBean(DynamoDBMapper.class);
 
         CreateTableRequest createTableTarefaRequest = dynamoDBMapper.generateCreateTableRequest(Tarefa.class);
-
+        
         if (!amazonDynamoDB.listTables().getTableNames().contains(createTableTarefaRequest.getTableName())) {
             createTableTarefaRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
             amazonDynamoDB.createTable(createTableTarefaRequest);

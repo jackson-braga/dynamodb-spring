@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @DynamoDBTable(tableName = "quadros")
 public class CartaoTarefa {
+
     @DynamoDBHashKey
     private String id;
     @DynamoDBRangeKey
