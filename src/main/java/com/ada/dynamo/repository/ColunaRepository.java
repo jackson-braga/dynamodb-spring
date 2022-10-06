@@ -1,16 +1,16 @@
 package com.ada.dynamo.repository;
 
 import com.ada.dynamo.model.Coluna;
-import com.ada.dynamo.model.Quadro;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ public class ColunaRepository {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":tipo", new AttributeValue().withS("COLUNA"));
 
-
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
                 .withFilterExpression("tipo = :tipo")
                 .withExpressionAttributeValues(eav);
@@ -40,7 +39,7 @@ public class ColunaRepository {
         return Optional.ofNullable(mapper.load(Coluna.class, id, "COLUNA"));
     }
 
-    public void delete(Coluna id) {
-        mapper.delete(id);
+    public void delete(Coluna entity) {
+        mapper.delete(entity);
     }
 }

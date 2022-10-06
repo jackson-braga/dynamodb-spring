@@ -11,20 +11,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ColunaService implements ServiceContract<ColunaRequest, ColunaResponse> {
 
     private final ColunaRepository repository;
+    private final QuadroService quadroService;
 
     @Override
     public ColunaResponse findById(String id) {
-        var coluna = repository.findById(id)
-                .orElseThrow(() -> new ItemNaoEncontradoException(String.format("Coluna com id %s não encontrada", id)));
-
+        Coluna coluna = findModelById(id);
         return mapToResponse(coluna);
+    }
+
+    public Coluna findModelById(String id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ItemNaoEncontradoException(String.format("Coluna com id %s não encontrada", id)));
     }
 
     @Override
@@ -41,17 +44,17 @@ public class ColunaService implements ServiceContract<ColunaRequest, ColunaRespo
 
     @Override
     public ColunaResponse create(ColunaRequest request) {
+        quadroService.findModelById(request.getQuadroId());
+
         Coluna colunaModel = mapToModel(request);
-        var coluna = repository.save(request.getQuadroId().toString(), colunaModel);
+        Coluna coluna = repository.save(request.getQuadroId(), colunaModel);
 
         return mapToResponse(coluna);
     }
 
     @Override
     public void delete(String id) {
-        var coluna = repository.findById(id).orElseThrow(
-                () -> new ItemNaoEncontradoException(String.format("Coluna com id %s não encontrada para deleção", id))
-        );
+        Coluna coluna = findModelById(id);
         repository.delete(coluna);
     }
 
