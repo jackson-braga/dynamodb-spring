@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TarefaRequest {
-    private String id;
     private String titulo;
     private String descricao;
     private Prioridade prioridade;
