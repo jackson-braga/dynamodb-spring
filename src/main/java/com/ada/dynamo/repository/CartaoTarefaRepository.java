@@ -20,8 +20,8 @@ public class CartaoTarefaRepository {
 
     private static final String TIPO = "tarefa";
 
-    public CartaoTarefa save(String tarefaId, String colunaId, CartaoTarefa tarefa) {
-        tarefa.setId(tarefaId + "#" + colunaId + "#" + UUID.randomUUID());
+    public CartaoTarefa save(String quadroId, String colunaId, CartaoTarefa tarefa) {
+        tarefa.setId(quadroId + "#" + colunaId + "#" + UUID.randomUUID());
         tarefa.setTipo(TIPO);
         mapper.save(tarefa);
         return tarefa;
