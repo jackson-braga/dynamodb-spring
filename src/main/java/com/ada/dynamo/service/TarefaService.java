@@ -5,12 +5,14 @@ import com.ada.dynamo.dto.response.TarefaResponse;
 import com.ada.dynamo.exception.ItemComAssociassaoException;
 import com.ada.dynamo.exception.ItemNaoEncontradoException;
 import com.ada.dynamo.model.CartaoTarefa;
+import com.ada.dynamo.model.Prioridade;
 import com.ada.dynamo.model.Tarefa;
 import com.ada.dynamo.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,6 +70,7 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
         findModelById(id);
         Tarefa tarefaModel = mapToModel(tarefaRequest);
         tarefaModel.setId(id);
+
         return mapToResponse(repository.save(tarefaModel));
     }
 

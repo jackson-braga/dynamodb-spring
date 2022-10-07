@@ -1,7 +1,9 @@
 package com.ada.dynamo.service;
 
 import com.ada.dynamo.dto.request.CartaoTarefaRequest;
+import com.ada.dynamo.dto.request.TarefaRequest;
 import com.ada.dynamo.dto.response.CartaoTarefaResponse;
+import com.ada.dynamo.dto.response.TarefaResponse;
 import com.ada.dynamo.exception.ItemNaoEncontradoException;
 import com.ada.dynamo.model.CartaoTarefa;
 import com.ada.dynamo.model.Tarefa;
@@ -12,7 +14,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +40,17 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
                 ));
     }
 
+    public List<CartaoTarefaResponse> findByQuadro(String id){
+        var cartoesTarefa = repository.findByQuadro(id);
+        var iterator = cartoesTarefa.iterator();
+
+        var cartoesTarefaResponses = new ArrayList<CartaoTarefaResponse>();
+        while (iterator.hasNext()) {
+            cartoesTarefaResponses.add(mapToResponse(iterator.next()));
+        }
+        return cartoesTarefaResponses;
+    }
+
     @Override
     public List<CartaoTarefaResponse> findAll() {
         var cartoesTarefa = repository.findAll();
@@ -45,6 +61,10 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
             cartoesTarefaResponses.add(mapToResponse(iterator.next()));
         }
         return cartoesTarefaResponses;
+    }
+
+    public Optional<CartaoTarefa> findByTarefa(String id) {
+        return repository.findByTarefa(id);
     }
 
     @Override
@@ -67,7 +87,30 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
 
     @Override
     public CartaoTarefaResponse update(CartaoTarefaRequest cartaoTarefaRequest, String id) {
-        return null;
+        var novoCartaoTarefa = create(cartaoTarefaRequest);
+        delete(id);
+        return novoCartaoTarefa;
+    }
+    public void updateTarefa(TarefaResponse tarefaResponse) {
+        var cartaoTarefa = findByTarefa(tarefaResponse.getId());
+
+        if(cartaoTarefa.isPresent()) {
+            var cartaoTarefaId = cartaoTarefa.get().getId();
+
+            var ids = cartaoTarefaId.split("#");
+            var colunaId = ids[0].concat("#" + ids[1]);
+
+            var cartaoTarefaRequest = new CartaoTarefaRequest();
+            cartaoTarefaRequest.setTarefaId(tarefaResponse.getId());
+            cartaoTarefaRequest.setColunaId(colunaId);
+            create(cartaoTarefaRequest);
+        }
+    }
+
+    public CartaoTarefaRequest mapToRequest(CartaoTarefa model) {
+        var cartaoTarefaRequest = new CartaoTarefaRequest();
+        BeanUtils.copyProperties(model, cartaoTarefaRequest);
+        return cartaoTarefaRequest;
     }
 
     private CartaoTarefaResponse mapToResponse(CartaoTarefa model) {

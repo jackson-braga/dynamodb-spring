@@ -2,6 +2,7 @@ package com.ada.dynamo.controller;
 
 import com.ada.dynamo.dto.request.TarefaRequest;
 import com.ada.dynamo.dto.response.TarefaResponse;
+import com.ada.dynamo.service.CartaoTarefaService;
 import com.ada.dynamo.service.TarefaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 public class TarefaController {
 
     private final TarefaService service;
+    private final CartaoTarefaService cartaoTarefaService;
 
     @PostMapping
     public ResponseEntity<TarefaResponse> create(@RequestBody @Valid TarefaRequest tarefaRequest, UriComponentsBuilder uriComponentsBuilder) {
@@ -43,6 +45,8 @@ public class TarefaController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<TarefaResponse> update(@RequestBody TarefaRequest tarefaRequest, @PathVariable String id) {
-        return ResponseEntity.ok(service.update(tarefaRequest, id));
+        var tarefaResponse = service.update(tarefaRequest, id);
+        cartaoTarefaService.updateTarefa(tarefaResponse);
+        return ResponseEntity.ok(tarefaResponse);
     }
 }

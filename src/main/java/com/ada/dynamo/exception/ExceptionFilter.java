@@ -1,12 +1,15 @@
 package com.ada.dynamo.exception;
 
 import com.ada.dynamo.dto.response.GenericResponse;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.ZonedDateTime;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionFilter {
@@ -32,6 +35,20 @@ public class ExceptionFilter {
     })
     public ResponseEntity<?> handleNullPointerException(NullPointerException ex) {
         var genericResponse = new GenericResponse(ex.getMessage(), ZonedDateTime.now().toEpochSecond());
+        return ResponseEntity.internalServerError().body(genericResponse);
+    }
+
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class
+    })
+    public ResponseEntity<?> handleColorException(MethodArgumentNotValidException ex) {
+
+        var message = ex.getBindingResult()
+                .getFieldErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining(System.lineSeparator()));
+
+        var genericResponse = new GenericResponse(message, ZonedDateTime.now().toEpochSecond());
         return ResponseEntity.internalServerError().body(genericResponse);
     }
 }

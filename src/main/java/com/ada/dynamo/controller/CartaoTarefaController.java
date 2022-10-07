@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/cartao-tarefa")
@@ -34,6 +35,11 @@ public class CartaoTarefaController {
     @GetMapping(value = ("/{id}"))
     public ResponseEntity<CartaoTarefaResponse> findById(@PathVariable String id) {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/quadro/{id}")
+    public ResponseEntity<List<CartaoTarefaResponse>> findByQuadro(@PathVariable String id) {
+        return ResponseEntity.ok(service.findByQuadro(id));
     }
 
     @DeleteMapping("/{id}")

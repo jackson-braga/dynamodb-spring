@@ -44,6 +44,17 @@ public class ColunaService implements ServiceContract<ColunaRequest, ColunaRespo
         return colunaResponses;
     }
 
+    public List<ColunaResponse> findByQuadro(String quadroId) {
+        var colunas = repository.findByQuadro(quadroId);
+        var iterator = colunas.iterator();
+
+        var colunaResponses = new ArrayList<ColunaResponse>();
+        while (iterator.hasNext()) {
+            colunaResponses.add(mapToResponse(iterator.next()));
+        }
+        return colunaResponses;
+    }
+
     @Override
     public ColunaResponse create(ColunaRequest colunaRequest) {
         quadroService.findModelById(colunaRequest.getQuadroId());

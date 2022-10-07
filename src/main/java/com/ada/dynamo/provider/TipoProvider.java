@@ -6,6 +6,12 @@ public enum TipoProvider {
         public String stringValue() {
             return "CARTAO_TAREFA";
         }
+    },
+    COLUNA {
+        @Override
+        public String stringValue() {
+            return "COLUNA";
+        }
     };
 
     public abstract String stringValue();
