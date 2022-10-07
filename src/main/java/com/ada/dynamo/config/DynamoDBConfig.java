@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.DeleteTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -58,6 +59,8 @@ public class DynamoDBConfig {
         DynamoDBMapper dynamoDBMapper = event.getApplicationContext().getBean(DynamoDBMapper.class);
 
         CreateTableRequest createTableTarefaRequest = dynamoDBMapper.generateCreateTableRequest(Tarefa.class);
+        /*DeleteTableRequest deleteTableRequest = dynamoDBMapper.generateDeleteTableRequest(Tarefa.class);
+        amazonDynamoDB.deleteTable(deleteTableRequest);*/
 
         if (!amazonDynamoDB.listTables().getTableNames().contains(createTableTarefaRequest.getTableName())) {
             createTableTarefaRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));

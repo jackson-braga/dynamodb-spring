@@ -42,7 +42,11 @@ public class CartaoTarefaService {
 
     public CartaoTarefa update(String cartaoTarefaId, CartaoTarefaRequest cartaoTarefaRequest){
         CartaoTarefa cartaoTarefa = cartaoTarefaMapper.toModel(cartaoTarefaRequest);
+        String idTarefa = cartaoTarefaId.split("_")[2];
+        Tarefa tarefa = cartaoTarefaMapper.toTarefa(cartaoTarefaRequest);
+        tarefa.setId(idTarefa);
         cartaoTarefa.setId(cartaoTarefaId);
+        tarefaRepository.save(tarefa);
         return cartaoTarefaRepository.save(cartaoTarefa);
     }
 
@@ -52,8 +56,8 @@ public class CartaoTarefaService {
         }
         CartaoTarefa cartaoTarefa = findById(cartaoTarefaId);
         delete(cartaoTarefaId);
-        String idCartao = cartaoTarefaId.split("_")[2];
-        cartaoTarefa.setId(quadroColunaId.concat("_" + idCartao));
+        String idTarefa = cartaoTarefaId.split("_")[2];
+        cartaoTarefa.setId(quadroColunaId.concat("_" + idTarefa));
         return cartaoTarefaRepository.save(cartaoTarefa);
     }
 

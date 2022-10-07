@@ -21,7 +21,7 @@ public class TarefaRepository extends AbstractRepository<Tarefa,String> {
         super(mapper);
     }
 
-    @Override
+    @Override //TODO mudar esse aqui
     protected DynamoDBScanExpression getDynamoDBScanExpression() {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":tipo", new AttributeValue().withS("TAREFA"));
