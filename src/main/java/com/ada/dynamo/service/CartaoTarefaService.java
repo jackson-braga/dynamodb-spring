@@ -34,19 +34,21 @@ public class CartaoTarefaService {
         return cartaoTarefaRepository.save(cartaoTarefa);
     }
 
-    public Tarefa save(CartaoTarefaRequest cartaoTarefaRequest){
-        Tarefa cartaoTarefa = cartaoTarefaMapper.toTarefa(cartaoTarefaRequest);
-        cartaoTarefa.setId(UUID.randomUUID().toString());
-        return tarefaRepository.save(cartaoTarefa);
-    }
 
     public CartaoTarefa update(String cartaoTarefaId, CartaoTarefaRequest cartaoTarefaRequest){
+        CartaoTarefa cartaoTarefaLocalizado = findById(cartaoTarefaId);
+
+        if(cartaoTarefaLocalizado == null) {
+            throw new RuntimeException("ID não existente!");
+        }
+
         CartaoTarefa cartaoTarefa = cartaoTarefaMapper.toModel(cartaoTarefaRequest);
         String idTarefa = cartaoTarefaId.split("_")[2];
         Tarefa tarefa = cartaoTarefaMapper.toTarefa(cartaoTarefaRequest);
         tarefa.setId(idTarefa);
         cartaoTarefa.setId(cartaoTarefaId);
         tarefaRepository.save(tarefa);
+
         return cartaoTarefaRepository.save(cartaoTarefa);
     }
 
@@ -84,4 +86,5 @@ public class CartaoTarefaService {
         Integer limiteTarefaColuna = colunaRepository.findById(idColuna).getLimite();
         return limiteTarefaColuna <= countCartaoTarefafromColuna(idColuna);
     }
+
 }

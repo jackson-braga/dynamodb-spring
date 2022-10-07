@@ -22,10 +22,6 @@ public class CartaoTarefaController {
         return ResponseEntity.ok(service.save(cartaoTarefaId, quadroColunaId));
     }
 
-    @PostMapping()
-    public ResponseEntity<Tarefa> addTarefa(@RequestBody @Valid CartaoTarefaRequest cartaoTarefaRequest) {
-        return ResponseEntity.ok(service.save(cartaoTarefaRequest));
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<CartaoTarefa> findById(@PathVariable String id) {
@@ -52,4 +48,5 @@ public class CartaoTarefaController {
     public ResponseEntity<CartaoTarefa> changeColumn(@PathVariable String idCartaoTarefa, @PathVariable String idColunaNova) {
         return ResponseEntity.ok(service.changeColuna(idCartaoTarefa,idColunaNova));
     }
+
 }

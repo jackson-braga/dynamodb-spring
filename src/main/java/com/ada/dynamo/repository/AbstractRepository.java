@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public abstract class AbstractRepository<TEntity, TKey> {
 
-    private final DynamoDBMapper mapper;
+    protected final DynamoDBMapper mapper;
 
     public TEntity save(TEntity TEntity) {
         mapper.save(TEntity);
