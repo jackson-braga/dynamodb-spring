@@ -5,7 +5,6 @@ import com.ada.dynamo.dto.response.TarefaResponse;
 import com.ada.dynamo.exception.ItemComAssociassaoException;
 import com.ada.dynamo.exception.ItemNaoEncontradoException;
 import com.ada.dynamo.model.CartaoTarefa;
-import com.ada.dynamo.model.Prioridade;
 import com.ada.dynamo.model.Tarefa;
 import com.ada.dynamo.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +37,7 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
     public TarefaResponse create(TarefaRequest tarefaRequest) {
         Tarefa tarefaModel = mapToModel(tarefaRequest);
         tarefaModel.setId(UUID.randomUUID().toString());
+        tarefaModel.setCriacao(LocalDateTime.now());
         Tarefa tarefa = repository.save(tarefaModel);
         return mapToResponse(tarefa);
     }
@@ -67,13 +67,13 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
     @Override
     public TarefaResponse update(TarefaRequest tarefaRequest, String id) {
-        findModelById(id);
+        Tarefa tarefa = findModelById(id);
         Tarefa tarefaModel = mapToModel(tarefaRequest);
+        tarefaModel.setCriacao(tarefa.getCriacao());
         tarefaModel.setId(id);
 
         return mapToResponse(repository.save(tarefaModel));
     }
-
 
     private TarefaResponse mapToResponse(Tarefa tarefa) {
         TarefaResponse tarefaResponse = new TarefaResponse();
