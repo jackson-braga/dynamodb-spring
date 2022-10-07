@@ -1,5 +1,6 @@
-package com.ada.dynamo.domain.exception;
+package com.ada.dynamo.application.exception;
 
+import com.ada.dynamo.domain.exception.ItemNaoExistenteException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.ada.dynamo.domain.exception;
+package com.ada.dynamo.application.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

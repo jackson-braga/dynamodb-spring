@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequestMapping("/api/tarefa")
 @RequiredArgsConstructor
 public class TarefaController {
-
+    @Lazy
     private final TarefaService tarefaService;
 
     @PostMapping

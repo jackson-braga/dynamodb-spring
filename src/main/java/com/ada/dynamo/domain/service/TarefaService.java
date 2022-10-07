@@ -18,6 +18,8 @@ public class TarefaService {
 
     private final TarefaRepository tarefaRepository;
 
+    private final CartaoTarefaService cartaoTarefaService;
+
     public Tarefa save(TarefaRequest TarefaRequest) {
         Tarefa tarefa = TarefaMapper.INSTANCE.tarefaRequestToTarefa(TarefaRequest);
         tarefa.setId(UUID.randomUUID().toString());
@@ -46,8 +48,25 @@ public class TarefaService {
         tarefaRepository.update(tarefa);
     }
 
+    public void concluirTarefa(String haskKey, String rangeKey) {
+        Tarefa tarefa = tarefaRepository.getByHashKeyAndRangeKey(haskKey, rangeKey)
+                .orElseThrow(() -> new ItemNaoExistenteException(Tarefa.class));
+        LocalDateTime now = LocalDateTime.now();
+        tarefa.setConclusao(now);
+        cartaoTarefaService.concluirCartaoTarefa(tarefa.getIdCartaoTarefa(), now);
+    }
+
+    public void concluirTarefa(String haskKey, String rangeKey, LocalDateTime localDateTime) {
+        Tarefa tarefa = tarefaRepository.getByHashKeyAndRangeKey(haskKey, rangeKey)
+                .orElseThrow(() -> new ItemNaoExistenteException(Tarefa.class));
+        tarefa.setConclusao(localDateTime);
+    }
+
     public void delete(String hashKey, String rangeKey) {
         tarefaRepository.delete(hashKey, rangeKey);
+        Tarefa tarefa = tarefaRepository.getByHashKeyAndRangeKey(hashKey, rangeKey)
+                        .orElseThrow(() -> new ItemNaoExistenteException(Tarefa.class));
+        cartaoTarefaService.delete(tarefa.getIdCartaoTarefa());
     }
 
     private String generateHashKey(String hashKeyColuna) {

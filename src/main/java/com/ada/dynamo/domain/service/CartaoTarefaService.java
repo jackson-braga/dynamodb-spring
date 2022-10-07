@@ -2,6 +2,7 @@ package com.ada.dynamo.domain.service;
 
 import com.ada.dynamo.application.mapper.CartaoTarefaMapper;
 import com.ada.dynamo.application.request.CreateCartaoTarefaRequest;
+import com.ada.dynamo.application.request.TarefaRequest;
 import com.ada.dynamo.application.request.UpdateCartaoTarefaRequest;
 import com.ada.dynamo.domain.exception.ItemNaoExistenteException;
 import com.ada.dynamo.domain.model.CartaoTarefa;
@@ -9,6 +10,7 @@ import com.ada.dynamo.domain.repository.CartaoTarefaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,10 +49,34 @@ public class CartaoTarefaService {
         CartaoTarefa cartaoTarefa = CartaoTarefaMapper.INSTANCE.updateCartaoTarefaRequestToCartaoTarefa(updateCartaoTarefaRequest);
         cartaoTarefa.setId(hashKey);
         cartaoTarefa.setTipo(TIPO);
+        cartaoTarefaRepository.update(cartaoTarefa);
+        String idTarefa = cartaoTarefa.getId().split("#")[2];
+        tarefaService.getByHashKeyAndRangeKey(idTarefa, cartaoTarefa.getTitulo());
+        TarefaRequest tarefaRequest = new TarefaRequest();
+        tarefaRequest.setDescricao(cartaoTarefa.getDescricao());
+        tarefaRequest.setPrioridade(cartaoTarefa.getPrioridade());
+        tarefaRequest.setPrevisao(cartaoTarefa.getPrevisao());
 
-        return cartaoTarefaRepository.update(cartaoTarefa);
+        tarefaService.update(idTarefa, tarefaRequest);
+        return cartaoTarefa;
     }
 
+    public void concluirCartaoTarefa(String hashKey) {
+        CartaoTarefa cartaoTarefa = cartaoTarefaRepository.getByHashKeyAndRangeKey(hashKey)
+                .orElseThrow(() -> new ItemNaoExistenteException(CartaoTarefa.class));
+        LocalDateTime now = LocalDateTime.now();
+        cartaoTarefa.setConclusao(now);
+        cartaoTarefaRepository.update(cartaoTarefa);
+        String idTarefa = cartaoTarefa.getId().split("#")[2];
+        tarefaService.concluirTarefa(idTarefa, cartaoTarefa.getTitulo(), now);
+    }
+
+    public void concluirCartaoTarefa(String hashKey, LocalDateTime localDateTime) {
+        CartaoTarefa cartaoTarefa = cartaoTarefaRepository.getByHashKeyAndRangeKey(hashKey)
+                .orElseThrow(() -> new ItemNaoExistenteException(CartaoTarefa.class));
+        cartaoTarefa.setConclusao(localDateTime);
+        cartaoTarefaRepository.update(cartaoTarefa);
+    }
     public void delete(String hashKey) {
         cartaoTarefaRepository.delete(hashKey);
     }
