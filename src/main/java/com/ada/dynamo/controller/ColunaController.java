@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class ColunaController {
     private final ColunaRepository repository;
 
-    //TODO: Completar CRUD das colunas
     @PostMapping("/{quadroId}")
     public ResponseEntity<Coluna> addTarefa(@PathVariable String quadroId, @RequestBody Coluna coluna) {
         return ResponseEntity.ok(repository.save(quadroId, coluna));

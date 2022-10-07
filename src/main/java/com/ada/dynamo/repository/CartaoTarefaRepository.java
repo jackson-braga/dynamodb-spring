@@ -1,6 +1,7 @@
 package com.ada.dynamo.repository;
 
 import com.ada.dynamo.model.CartaoTarefa;
+import com.ada.dynamo.model.Tarefa;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -18,13 +19,14 @@ public class CartaoTarefaRepository {
 
     private final DynamoDBMapper mapper;
     private final ColunaRepository colunaRepository;
-
+    private final TarefaRepository tarefaRepository;
     private static final String TIPO = "tarefa";
 
     public CartaoTarefa save(String quadroId, String colunaId, CartaoTarefa tarefa) {
         tarefa.setId(generateId(quadroId, colunaId));
         tarefa.setTipo(TIPO);
         mapper.save(tarefa);
+        tarefaRepository.save(new Tarefa(tarefa));
         return tarefa;
     }
 
@@ -63,7 +65,9 @@ public class CartaoTarefaRepository {
     }
 
     public void delete(String id) {
-        mapper.delete(findById(id));
+        CartaoTarefa cartaoTarefa = findById(id);
+        mapper.delete(cartaoTarefa);
+        tarefaRepository.delete(tarefaRepository.findById(cartaoTarefa.convertIdToTarefaId()).getId());
     }
 
 }

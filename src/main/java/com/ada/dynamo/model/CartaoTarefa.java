@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @DynamoDBTable(tableName = "quadros")
@@ -26,4 +27,9 @@ public class CartaoTarefa {
     private LocalDateTime previsao;
     @DynamoDBTypeConverted(converter = LocalDateTimeToStringConverter.class)
     private LocalDateTime conclusao;
+
+    public UUID convertIdToTarefaId(){
+        var id = this.getId().split("#");
+        return UUID.fromString(id[2]);
+    }
 }

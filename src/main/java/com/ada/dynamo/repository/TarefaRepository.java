@@ -16,7 +16,8 @@ public class TarefaRepository {
     private final DynamoDBMapper mapper;
 
     public Tarefa save(Tarefa tarefa) {
-        tarefa.setId(UUID.randomUUID());
+        if(Objects.isNull(tarefa.getId()))
+            tarefa.setId(UUID.randomUUID());
         mapper.save(tarefa);
         return tarefa;
     }

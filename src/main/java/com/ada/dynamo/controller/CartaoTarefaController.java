@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class CartaoTarefaController {
     private final CartaoTarefaRepository repository;
 
-    //TODO: Parear alterações com as tarefas da tabela "quadros"
 
     @PostMapping("/{quadroId}/{colunaId}")
     public ResponseEntity<CartaoTarefa> addTarefa(@PathVariable String quadroId,
@@ -45,7 +44,6 @@ public class CartaoTarefaController {
                                                       @RequestBody CartaoTarefa tarefa) {
         return ResponseEntity.ok(repository.changeCollumn(quadroId, colunaId, tarefa));
     }
-
     @DeleteMapping("/{quadroId}/{colunaId}/{tarefaId}")
     public ResponseEntity<CartaoTarefa> delete(@PathVariable String quadroId,
                                                @PathVariable String colunaId,
