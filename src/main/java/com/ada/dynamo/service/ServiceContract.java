@@ -8,4 +8,6 @@ public interface ServiceContract<TRequest, TResponse> {
     List<TResponse> findAll();
     TResponse create(TRequest request);
     void delete(String id);
+
+    TResponse update(TRequest request, String id);
 }

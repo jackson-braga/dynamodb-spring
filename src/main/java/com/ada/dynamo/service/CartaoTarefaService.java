@@ -63,6 +63,11 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
         repository.delete(cartaoTarefa);
     }
 
+    @Override
+    public CartaoTarefaResponse update(CartaoTarefaRequest cartaoTarefaRequest, String id) {
+        return null;
+    }
+
     private CartaoTarefaResponse mapToResponse(CartaoTarefa model) {
         var cartaoTarefaResponse = new CartaoTarefaResponse();
         BeanUtils.copyProperties(model, cartaoTarefaResponse);

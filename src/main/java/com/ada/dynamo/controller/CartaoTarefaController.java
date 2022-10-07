@@ -7,8 +7,10 @@ import com.ada.dynamo.service.CartaoTarefaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/cartao-tarefa")
@@ -18,8 +20,10 @@ public class CartaoTarefaController {
     private final CartaoTarefaService service;
 
     @PostMapping()
-    public ResponseEntity<CartaoTarefaResponse> createCartaoTarefa(@RequestBody @Valid CartaoTarefaRequest cartaoTarefaRequest) {
-        return ResponseEntity.ok(service.create(cartaoTarefaRequest));
+    public ResponseEntity<CartaoTarefaResponse> createCartaoTarefa(@RequestBody @Valid CartaoTarefaRequest cartaoTarefaRequest, UriComponentsBuilder uriComponentsBuilder) {
+        CartaoTarefaResponse cartaoTarefaResponse = service.create(cartaoTarefaRequest);
+        URI uri = uriComponentsBuilder.path("/api/cartao-tarefa").buildAndExpand(cartaoTarefaResponse.getId()).toUri();
+        return ResponseEntity.created(uri).body(cartaoTarefaResponse);
     }
 
     @GetMapping
@@ -36,5 +40,10 @@ public class CartaoTarefaController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CartaoTarefaResponse> update(@RequestBody CartaoTarefaRequest cartaoTarefaRequest, @PathVariable String id){
+        return ResponseEntity.ok(service.update(cartaoTarefaRequest, id));
     }
 }

@@ -3,7 +3,9 @@ package com.ada.dynamo.service;
 import com.ada.dynamo.dto.request.TarefaRequest;
 import com.ada.dynamo.dto.response.TarefaResponse;
 import com.ada.dynamo.exception.ItemNaoEncontradoException;
+import com.ada.dynamo.model.CartaoTarefa;
 import com.ada.dynamo.model.Tarefa;
+import com.ada.dynamo.repository.CartaoTarefaRepository;
 import com.ada.dynamo.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +54,15 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
         var tarefa = findModelById(id);
         repository.delete(tarefa);
     }
+
+    @Override
+    public TarefaResponse update(TarefaRequest tarefaRequest, String id) {
+        repository.findById(id);
+        Tarefa tarefaModel = mapToModel(tarefaRequest);
+        tarefaModel.setId(id);
+        return mapToResponse(repository.put(tarefaModel));
+    }
+
 
     private TarefaResponse mapToResponse(Tarefa tarefa) {
         var tarefaResponse = new TarefaResponse();

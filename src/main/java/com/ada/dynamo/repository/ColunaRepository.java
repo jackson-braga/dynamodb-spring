@@ -18,8 +18,7 @@ public class ColunaRepository {
 
     private final DynamoDBMapper mapper;
 
-    public Coluna save(String quadroId, Coluna coluna) {
-        coluna.setId(String.format("%s#%s", quadroId, UUID.randomUUID()));
+    public Coluna save(Coluna coluna) {
         mapper.save(coluna);
         return coluna;
     }

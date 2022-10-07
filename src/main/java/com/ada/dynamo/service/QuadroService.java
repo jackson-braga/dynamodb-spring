@@ -56,6 +56,14 @@ public class QuadroService implements ServiceContract<QuadroRequest, QuadroRespo
         repository.delete(quadro);
     }
 
+    @Override
+    public QuadroResponse update(QuadroRequest quadroRequest, String id) {
+        repository.findById(id);
+        Quadro quadroModel = mapToModel(quadroRequest);
+        quadroModel.setId(id);
+        return mapToResponse(repository.put(quadroModel));
+    }
+
     private QuadroResponse mapToResponse(Quadro quadro) {
         var quadroResponse = new QuadroResponse();
         BeanUtils.copyProperties(quadro, quadroResponse);

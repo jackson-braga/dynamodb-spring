@@ -6,8 +6,10 @@ import com.ada.dynamo.service.TarefaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,8 +20,10 @@ public class TarefaController {
     private final TarefaService service;
 
     @PostMapping
-    public ResponseEntity<TarefaResponse> createTarefa(@RequestBody @Valid TarefaRequest tarefaRequest) {
-        return ResponseEntity.ok(service.create(tarefaRequest));
+    public ResponseEntity<TarefaResponse> createTarefa(@RequestBody @Valid TarefaRequest tarefaRequest, UriComponentsBuilder uriComponentsBuilder) {
+        TarefaResponse tarefaResponse = service.create(tarefaRequest);
+        URI uri = uriComponentsBuilder.path("/api/tarefa").buildAndExpand(tarefaResponse.getId()).toUri();
+        return ResponseEntity.created(uri).body(tarefaResponse);
     }
 
     @GetMapping
@@ -36,5 +40,9 @@ public class TarefaController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<TarefaResponse> update(@RequestBody TarefaRequest tarefaRequest, @PathVariable String id) {
+        return ResponseEntity.ok(service.update(tarefaRequest, id));
     }
 }

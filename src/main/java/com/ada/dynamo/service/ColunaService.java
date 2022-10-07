@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +48,8 @@ public class ColunaService implements ServiceContract<ColunaRequest, ColunaRespo
         quadroService.findModelById(request.getQuadroId());
 
         Coluna colunaModel = mapToModel(request);
-        Coluna coluna = repository.save(request.getQuadroId(), colunaModel);
+        colunaModel.setId(String.format("%s#%s", request.getQuadroId(), UUID.randomUUID()));
+        Coluna coluna = repository.save(colunaModel);
 
         return mapToResponse(coluna);
     }
@@ -56,6 +58,14 @@ public class ColunaService implements ServiceContract<ColunaRequest, ColunaRespo
     public void delete(String id) {
         Coluna coluna = findModelById(id);
         repository.delete(coluna);
+    }
+
+    @Override
+    public ColunaResponse update(ColunaRequest colunaRequest, String id) {
+        findModelById(id);
+        Coluna colunaModel = mapToModel(colunaRequest);
+        colunaModel.setId(id);
+        return mapToResponse(repository.save(colunaModel));
     }
 
     private ColunaResponse mapToResponse(Coluna coluna) {
