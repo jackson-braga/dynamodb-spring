@@ -19,29 +19,32 @@ public class TarefaService {
     private final CartaoTarefaRepository cartaoTarefaRepository;
     private final CartaoTarefaMapper mapper;
 
-    public Tarefa save(CartaoTarefaRequest cartaoTarefaRequest){
+    public Tarefa save(CartaoTarefaRequest cartaoTarefaRequest) {
         Tarefa cartaoTarefa = mapper.toTarefa(cartaoTarefaRequest);
         cartaoTarefa.setId(UUID.randomUUID().toString());
         return Tarefarepository.save(cartaoTarefa);
     }
+
     public Tarefa findById(String id) {
         return Tarefarepository.findById(id);
     }
+
     public List<Tarefa> getAll() {
         return Tarefarepository.getAll();
     }
 
     public void delete(String id) {
-        CartaoTarefa cartaoTarefa = cartaoTarefaRepository.findIdContains(id);
-
-        cartaoTarefaRepository.delete(cartaoTarefa.getId());
+        List<CartaoTarefa> cartaoTarefa = cartaoTarefaRepository.findIdContains(id);
+        if (cartaoTarefa.size() != 0) {
+            cartaoTarefaRepository.delete(cartaoTarefa.get(0).getId());
+        }
         Tarefarepository.delete(id);
     }
 
     public Tarefa put(String id, CartaoTarefaRequest cartaoTarefaRequest) {
         Tarefa tarefaLocalizada = findById(id);
 
-        if(tarefaLocalizada == null) {
+        if (tarefaLocalizada == null) {
             throw new RuntimeException("ID não existente!");
         }
 
@@ -50,5 +53,4 @@ public class TarefaService {
 
         return Tarefarepository.save(tarefa);
     }
-
 }

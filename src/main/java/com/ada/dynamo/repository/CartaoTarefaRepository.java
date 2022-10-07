@@ -30,7 +30,7 @@ public class CartaoTarefaRepository extends AbstractRepository<CartaoTarefa, Str
                 .withExpressionAttributeValues(eav);
     }
 
-    public CartaoTarefa findIdContains(String idTarefa) {
+    public List<CartaoTarefa> findIdContains(String idTarefa) {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":id", new AttributeValue().withS(idTarefa));
 
@@ -38,7 +38,7 @@ public class CartaoTarefaRepository extends AbstractRepository<CartaoTarefa, Str
                 .withFilterExpression("contains(id, :id)")
                 .withExpressionAttributeValues(eav);
 
-        return new ArrayList<>(mapper.scan(CartaoTarefa.class, dynamoDBScanExpression)).get(0);
+        return new ArrayList<>(mapper.scan(CartaoTarefa.class, dynamoDBScanExpression));
     }
 
     @Override
