@@ -28,13 +28,13 @@ public class ColunaService implements ServiceContract<ColunaRequest, ColunaRespo
     }
 
     public Coluna findModelById(String id) {
-        return repository.findById(id)
+        return repository.findById(id, "COLUNA")
                 .orElseThrow(() -> new ItemNaoEncontradoException(String.format("Coluna com id %s não encontrada", id)));
     }
 
     @Override
     public List<ColunaResponse> findAll() {
-        var colunas = repository.findAll();
+        var colunas = repository.findBySortKey("tipo", "COLUNA");
         var iterator = colunas.iterator();
 
         var colunaResponses = new ArrayList<ColunaResponse>();

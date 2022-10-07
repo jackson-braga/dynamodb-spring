@@ -24,12 +24,12 @@ public class QuadroService implements ServiceContract<QuadroRequest, QuadroRespo
     }
 
     public Quadro findModelById(String id) {
-        return repository.findById(id)
+        return repository.findById(id, "QUADRO")
                 .orElseThrow(() -> new ItemNaoEncontradoException(String.format("Quadro com id %s não encontrado", id)));
     }
 
     public List<QuadroResponse> findAll() {
-        var quadros = repository.findAll();
+        var quadros = repository.findBySortKey("tipo", "QUADRO");
         var iterator = quadros.iterator();
 
         var quadroResponses = new ArrayList<QuadroResponse>();

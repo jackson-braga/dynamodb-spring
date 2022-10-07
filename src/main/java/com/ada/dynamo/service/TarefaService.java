@@ -56,7 +56,7 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
     @Override
     public void delete(String id) {
-        List<CartaoTarefa> partial = repository.findByPartialId(id);
+        List<CartaoTarefa> partial = repository.findCartaoTarefaByPartialId(id);
         if (!partial.isEmpty()) {
             throw new ItemComAssociassaoException(String.format("O id %s está associado a outros itens e não pode ser deletado", id));
         }

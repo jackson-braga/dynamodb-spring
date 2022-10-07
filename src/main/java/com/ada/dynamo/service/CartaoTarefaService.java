@@ -31,7 +31,7 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
     }
 
     public CartaoTarefa findModelById(String id) {
-        return repository.findById(id)
+        return repository.findById(id, TipoProvider.CARTAO_TAREFA.stringValue())
                 .orElseThrow(
                     () -> new ItemNaoEncontradoException(String.format("Cartao de tarefa com id %s não encontrado", id)
                 ));
@@ -50,7 +50,9 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
 
     @Override
     public List<CartaoTarefaResponse> findAll() {
-        var cartoesTarefa = repository.findAll();
+        var cartoesTarefa = repository.findBySortKey(
+                "tipo", TipoProvider.CARTAO_TAREFA.stringValue()
+        );
         var iterator = cartoesTarefa.iterator();
 
         var cartoesTarefaResponses = new ArrayList<CartaoTarefaResponse>();
@@ -70,9 +72,10 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
         Tarefa tarefa = tarefaService.findModelById(cartaoTarefaRequest.getTarefaId());
 
         CartaoTarefa cartaoTarefaModel = mapToModel(tarefa);
-        CartaoTarefa cartaoTarefa = repository.save(
-                cartaoTarefaRequest.getColunaId(), cartaoTarefaRequest.getTarefaId(), cartaoTarefaModel
+        cartaoTarefaModel.setId(
+                String.format("%s#%s", cartaoTarefaRequest.getColunaId(), cartaoTarefaRequest.getTarefaId())
         );
+        CartaoTarefa cartaoTarefa = repository.save(cartaoTarefaModel);
         return mapToResponse(cartaoTarefa);
     }
 

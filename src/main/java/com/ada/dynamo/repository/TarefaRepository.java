@@ -5,28 +5,24 @@ import com.ada.dynamo.model.Tarefa;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 @Repository
-@RequiredArgsConstructor
-public class TarefaRepository {
-    private final DynamoDBMapper mapper;
-
-    public Tarefa save(Tarefa tarefa) {
-        mapper.save(tarefa);
-        return tarefa;
+public class TarefaRepository extends RepositoryBase<Tarefa>{
+    public TarefaRepository(DynamoDBMapper mapper) {
+        super(mapper);
     }
 
-    public Optional<Tarefa> findById(String id) {
-        return Optional.ofNullable(mapper.load(Tarefa.class, id));
+    @Override
+    protected Class<Tarefa> getClassType() {
+        return Tarefa.class;
     }
 
-    public List<CartaoTarefa> findByPartialId(String id) {
+    public List<CartaoTarefa> findCartaoTarefaByPartialId(String partitionKey) {
         Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":id", new AttributeValue().withS(id));
+        eav.put(":id", new AttributeValue().withS(partitionKey));
 
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
                 .withFilterExpression("contains(id, :id) and id <> :id")
@@ -34,14 +30,4 @@ public class TarefaRepository {
 
         return mapper.scan(CartaoTarefa.class, scanExpression);
     }
-
-    public Iterable<Tarefa> findAll() {
-        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-        return mapper.scan(Tarefa.class, scanExpression);
-    }
-
-    public void delete(Tarefa entity) {
-        mapper.delete(entity);
-    }
-
 }
