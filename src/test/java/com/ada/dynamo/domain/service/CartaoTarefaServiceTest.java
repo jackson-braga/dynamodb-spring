@@ -79,8 +79,7 @@ public class CartaoTarefaServiceTest {
     @Test
     void criarCartaoTarefaComSucessoTeste() {
         Mockito.when(tarefaService.getByHashKeyAndRangeKey(Mockito.any(), Mockito.any())).thenReturn(fakeTarefa);
-        Mockito.when(cartaoTarefaService.createNewCartaoTarefaBasedOnTarefa(fakeTarefa)).thenReturn(fakeCartaoTarefa);
-        Mockito.when(cartaoTarefaRepository.save(fakeCartaoTarefa)).thenReturn(fakeCartaoTarefa);
+        Mockito.when(cartaoTarefaRepository.save(Mockito.any(CartaoTarefa.class))).thenReturn(fakeCartaoTarefa);
         CartaoTarefa cartaoTarefa = cartaoTarefaService.save(fakeCreateCartaoTarefaRequest);
         Assertions.assertEquals(cartaoTarefa, fakeCartaoTarefa);
     }
