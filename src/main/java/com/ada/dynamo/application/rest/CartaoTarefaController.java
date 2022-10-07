@@ -2,6 +2,7 @@ package com.ada.dynamo.application.rest;
 
 import com.ada.dynamo.application.mapper.CartaoTarefaMapper;
 import com.ada.dynamo.application.request.CreateCartaoTarefaRequest;
+import com.ada.dynamo.application.request.MoverCartaoRequest;
 import com.ada.dynamo.application.request.UpdateCartaoTarefaRequest;
 import com.ada.dynamo.application.response.CartaoTarefaResponse;
 import com.ada.dynamo.domain.model.CartaoTarefa;
@@ -47,8 +48,8 @@ public class CartaoTarefaController {
     }
 
     @PostMapping("/mover-cartao")
-    public ResponseEntity<CartaoTarefaResponse> moverCartao(@RequestBody String cartaoTarefaId, @RequestBody String colunaId) {
-        CartaoTarefa cartaoTarefa = cartaoTarefaService.moveCartaoTarefa(cartaoTarefaId, colunaId);
+    public ResponseEntity<CartaoTarefaResponse> moverCartao(@RequestBody MoverCartaoRequest moverCartaoRequest) {
+        CartaoTarefa cartaoTarefa = cartaoTarefaService.moveCartaoTarefa(moverCartaoRequest.getCartaoTarefaId(), moverCartaoRequest.getColunaId());
         CartaoTarefaResponse response = CartaoTarefaMapper.INSTANCE.cartaoTarefaToCartaoTarefaResponse(cartaoTarefa);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
