@@ -6,34 +6,57 @@ import com.ada.dynamo.application.request.TarefaRequest;
 import com.ada.dynamo.application.request.UpdateCartaoTarefaRequest;
 import com.ada.dynamo.domain.exception.ItemNaoExistenteException;
 import com.ada.dynamo.domain.model.CartaoTarefa;
+import com.ada.dynamo.domain.model.Tarefa;
 import com.ada.dynamo.domain.repository.CartaoTarefaRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class CartaoTarefaService {
 
     private static final String TIPO = "CARTAO_TAREFA";
 
     private CartaoTarefaRepository cartaoTarefaRepository;
 
-    public CartaoTarefa save(CreateCartaoTarefaRequest createCartaoTarefaRequest) {
-        CartaoTarefa cartaoTarefa = CartaoTarefaMapper.INSTANCE.createCartaoTarefaRequestToCartaoTarefa(createCartaoTarefaRequest);
-        cartaoTarefa.setId(generateHashKey(createCartaoTarefaRequest.getColunaId()));
-        cartaoTarefa.setTipo("CARTAO_TAREFA");
+    private TarefaService tarefaService;
 
-        return cartaoTarefaRepository.save(cartaoTarefa);
+    public CartaoTarefaService( @Lazy TarefaService tarefaService, CartaoTarefaRepository cartaoTarefaRepository) {
+        this.cartaoTarefaRepository = cartaoTarefaRepository;
+        this.tarefaService = tarefaService;
+    }
+
+    public CartaoTarefa save(CreateCartaoTarefaRequest createCartaoTarefaRequest) {
+        String tarefaHashKey = createCartaoTarefaRequest.getTarefaId();
+        String tarefaTitulo = createCartaoTarefaRequest.getTitulo();
+
+        Tarefa tarefa = tarefaService.getByHashKeyAndRangeKey(tarefaHashKey, tarefaTitulo);
+
+        CartaoTarefa newCartaoTarefa = createNewCartaoTarefaBasedOnTarefa(tarefa);
+
+        newCartaoTarefa.setId(generateHashKey(tarefaHashKey, createCartaoTarefaRequest.getColunaId()));
+
+        return cartaoTarefaRepository.save(newCartaoTarefa);
+    }
+
+    public CartaoTarefa createNewCartaoTarefaBasedOnTarefa(Tarefa tarefa) {
+        CartaoTarefa cartaoTarefa = new CartaoTarefa();
+        cartaoTarefa.setTipo("CARTAO_TAREFA");
+        cartaoTarefa.setTitulo(tarefa.getTitulo());
+        cartaoTarefa.setDescricao(tarefa.getDescricao());
+        cartaoTarefa.setPrioridade(tarefa.getPrioridade());
+        cartaoTarefa.setCriacao(tarefa.getCriacao());
+        cartaoTarefa.setPrevisao(tarefa.getPrevisao());
+        cartaoTarefa.setConclusao(tarefa.getConclusao());
+        return cartaoTarefa;
     }
 
     public CartaoTarefa getByHashKeyAndRangeKey(String hashKey) {
         return cartaoTarefaRepository.getByHashKeyAndRangeKey(hashKey)
-                .orElseThrow(ItemNaoExistenteException::new);
+                .orElseThrow(() -> new ItemNaoExistenteException(CartaoTarefa.class));
     }
 
     public List<CartaoTarefa> findAll() {
@@ -81,7 +104,7 @@ public class CartaoTarefaService {
         cartaoTarefaRepository.delete(hashKey);
     }
 
-    private String generateHashKey(String hashKeyColuna) {
-        return hashKeyColuna.concat("#").concat(UUID.randomUUID().toString());
+    private String generateHashKey(String hashKeyColuna, String hashKeyTarefa) {
+        return hashKeyColuna.concat("#").concat(hashKeyTarefa);
     }
 }

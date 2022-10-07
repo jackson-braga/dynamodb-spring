@@ -6,6 +6,7 @@ import com.ada.dynamo.domain.exception.ItemNaoExistenteException;
 import com.ada.dynamo.domain.model.Tarefa;
 import com.ada.dynamo.domain.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class TarefaService {
 
     public Tarefa save(TarefaRequest TarefaRequest) {
         Tarefa tarefa = TarefaMapper.INSTANCE.tarefaRequestToTarefa(TarefaRequest);
-        tarefa.setId(UUID.randomUUID().toString());
+        tarefa.setId(generateHashKey());
         tarefa.setCriacao(LocalDateTime.now());
 
         return tarefaRepository.save(tarefa);
@@ -30,22 +31,18 @@ public class TarefaService {
 
     public Tarefa getByHashKeyAndRangeKey(String hashKey, String rangeKey) {
         return tarefaRepository.getByHashKeyAndRangeKey(hashKey, rangeKey)
-                .orElseThrow(ItemNaoExistenteException::new);
+                .orElseThrow(() -> new ItemNaoExistenteException(Tarefa.class));
     }
 
     public List<Tarefa> findAll() {
         return tarefaRepository.findAll();
     }
 
-    //TODO Criar e sincronizar método de mover tarefa com CartaoTarefa
-    public void moveTarefa(String hashKey, String hashKeyNovaColuna) {
-
-    }
-
-    public void update(String hashKey, TarefaRequest tarefaRequest) {
+    public Tarefa update(String hashKey, TarefaRequest tarefaRequest) {
         Tarefa tarefa = TarefaMapper.INSTANCE.tarefaRequestToTarefa(tarefaRequest);
+        tarefa.setId(hashKey);
 
-        tarefaRepository.update(tarefa);
+        return tarefaRepository.update(tarefa);
     }
 
     public void concluirTarefa(String haskKey, String rangeKey) {
@@ -69,7 +66,7 @@ public class TarefaService {
         cartaoTarefaService.delete(tarefa.getIdCartaoTarefa());
     }
 
-    private String generateHashKey(String hashKeyColuna) {
-        return hashKeyColuna.concat("#").concat(UUID.randomUUID().toString());
+    private String generateHashKey() {
+        return UUID.randomUUID().toString();
     }
 }

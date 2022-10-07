@@ -7,6 +7,7 @@ import com.ada.dynamo.application.response.CartaoTarefaResponse;
 import com.ada.dynamo.domain.model.CartaoTarefa;
 import com.ada.dynamo.domain.service.CartaoTarefaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,20 @@ public class CartaoTarefaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PostMapping("/mover-cartao")
+    public ResponseEntity<CartaoTarefaResponse> moverCartao(@RequestBody String cartaoTarefaId, @RequestBody String colunaId) {
+        CartaoTarefa cartaoTarefa = cartaoTarefaService.moveCartaoTarefa(cartaoTarefaId, colunaId);
+        CartaoTarefaResponse response = CartaoTarefaMapper.INSTANCE.cartaoTarefaToCartaoTarefaResponse(cartaoTarefa);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/{hashKey}")
+    public ResponseEntity<Void> concluirCartaoTarefa(@PathVariable String hashKey) {
+        cartaoTarefaService.concluirCartaoTarefa(hashKey);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @PutMapping("/{hashKey}")
     public ResponseEntity<CartaoTarefaResponse> atualizar(@PathVariable String hashKey,
                                                           @RequestBody @Valid UpdateCartaoTarefaRequest updateCartaoTarefaRequest) {
@@ -60,9 +75,4 @@ public class CartaoTarefaController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/mover-cartao")
-    public ResponseEntity<?> moverCartao(@RequestBody String cartaoTarefaId, @RequestBody String colunaId) {
-        CartaoTarefa cartaoTarefa = cartaoTarefaService.moveCartaoTarefa(cartaoTarefaId, colunaId);
-        return ResponseEntity.ok(cartaoTarefa);
-    }
 }

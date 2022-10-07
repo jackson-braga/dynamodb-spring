@@ -15,8 +15,10 @@ import java.util.List;
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ItemNaoExistenteException.class})
-    protected ResponseEntity<Object> handleItemNotFound(RuntimeException ex, WebRequest request) {
-        CustomException exceptionDetail = new CustomException(List.of("Elemento não encontrado"), HttpStatus.NOT_FOUND.value());
+    protected ResponseEntity<?> handleItemNotFound(RuntimeException ex, WebRequest request) {
+        CustomException exceptionDetail = new CustomException(List.of(String.format("Elemento %s não encontrado", ex.getMessage())),
+                HttpStatus.NOT_FOUND.value());
+
         return handleExceptionInternal(ex, exceptionDetail,
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }

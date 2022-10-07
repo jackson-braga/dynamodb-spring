@@ -1,15 +1,18 @@
 package com.ada.dynamo.application.request;
 
-import com.ada.dynamo.domain.model.Prioridade;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class CreateCartaoTarefaRequest {
+
+    @NotBlank
+    private String tarefaId;
+
+    @NotBlank
     private String colunaId;
+
+    @NotBlank
     private String titulo;
-    private String descricao;
-    private Prioridade prioridade;
-    private LocalDateTime previsao;
 }

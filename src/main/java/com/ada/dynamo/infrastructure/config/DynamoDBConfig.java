@@ -1,5 +1,7 @@
 package com.ada.dynamo.infrastructure.config;
 
+import com.ada.dynamo.domain.model.CartaoTarefa;
+import com.ada.dynamo.domain.model.Coluna;
 import com.ada.dynamo.domain.model.Quadro;
 import com.ada.dynamo.domain.model.Tarefa;
 import com.amazonaws.auth.AWSCredentialsProvider;
@@ -69,6 +71,20 @@ public class DynamoDBConfig {
         if (!amazonDynamoDB.listTables().getTableNames().contains(createTableQuadroRequest.getTableName())) {
             createTableQuadroRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
             amazonDynamoDB.createTable(createTableQuadroRequest);
+        }
+
+        CreateTableRequest createTableCartaoTarefaRequest = dynamoDBMapper.generateCreateTableRequest(CartaoTarefa.class);
+
+        if (!amazonDynamoDB.listTables().getTableNames().contains(createTableCartaoTarefaRequest.getTableName())) {
+            createTableCartaoTarefaRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+            amazonDynamoDB.createTable(createTableCartaoTarefaRequest);
+        }
+
+        CreateTableRequest createTableColunaRequest = dynamoDBMapper.generateCreateTableRequest(Coluna.class);
+
+        if (!amazonDynamoDB.listTables().getTableNames().contains(createTableColunaRequest.getTableName())) {
+            createTableColunaRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+            amazonDynamoDB.createTable(createTableColunaRequest);
         }
     }
 }

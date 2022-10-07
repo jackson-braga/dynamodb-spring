@@ -30,7 +30,7 @@ public class ColunaService {
 
     public Coluna getByHashKeyAndRangeKey(String hashKey) {
         return colunaRepository.getByHashKeyAndRangeKey(hashKey)
-                .orElseThrow(ItemNaoExistenteException::new);
+                .orElseThrow(() -> new ItemNaoExistenteException(Coluna.class));
     }
 
     public List<Coluna> findAll() {

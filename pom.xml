@@ -12,7 +12,7 @@
 	<artifactId>dynamo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>dynamo</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Projeto dynamodb-spring realizado pelo grupo 3</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -55,6 +55,12 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>1.12.307</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 
 	</dependencies>

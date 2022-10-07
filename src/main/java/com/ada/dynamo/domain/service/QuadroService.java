@@ -28,7 +28,7 @@ public class QuadroService {
 
     public Quadro getByHashKeyAndRangeKey(String hashKey) {
         return quadroRepository.getByHashKeyAndRangeKey(hashKey)
-                .orElseThrow(ItemNaoExistenteException::new);
+                .orElseThrow(() -> new ItemNaoExistenteException(Quadro.class));
     }
 
     public List<Quadro> findAll() {
