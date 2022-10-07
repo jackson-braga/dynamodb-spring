@@ -19,7 +19,7 @@ public class ColunaController {
     private final ColunaService service;
 
     @PostMapping()
-    public ResponseEntity<ColunaResponse> createColuna(@RequestBody @Valid ColunaRequest colunaRequest, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<ColunaResponse> create(@RequestBody @Valid ColunaRequest colunaRequest, UriComponentsBuilder uriComponentsBuilder) {
         ColunaResponse colunaResponse = service.create(colunaRequest);
         URI uri = uriComponentsBuilder.path("/api/coluna").buildAndExpand(colunaResponse.getId()).toUri();
         return ResponseEntity.created(uri).body(colunaResponse);

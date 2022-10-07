@@ -20,7 +20,7 @@ public class TarefaController {
     private final TarefaService service;
 
     @PostMapping
-    public ResponseEntity<TarefaResponse> createTarefa(@RequestBody @Valid TarefaRequest tarefaRequest, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<TarefaResponse> create(@RequestBody @Valid TarefaRequest tarefaRequest, UriComponentsBuilder uriComponentsBuilder) {
         TarefaResponse tarefaResponse = service.create(tarefaRequest);
         URI uri = uriComponentsBuilder.path("/api/tarefa").buildAndExpand(tarefaResponse.getId()).toUri();
         return ResponseEntity.created(uri).body(tarefaResponse);

@@ -19,11 +19,9 @@ public class QuadroController {
     private final QuadroService service;
 
     @PostMapping
-    public ResponseEntity<QuadroResponse> addQuadro(@RequestBody QuadroRequest quadroRequest, UriComponentsBuilder uriComponentsBuilder) {
-
+    public ResponseEntity<QuadroResponse> create(@RequestBody QuadroRequest quadroRequest, UriComponentsBuilder uriComponentsBuilder) {
         QuadroResponse quadroResponse = service.create(quadroRequest);
         URI uri = uriComponentsBuilder.path("/api/quadro").buildAndExpand(quadroResponse.getId()).toUri();
-
         return ResponseEntity.created(uri).body(quadroResponse);
     }
 

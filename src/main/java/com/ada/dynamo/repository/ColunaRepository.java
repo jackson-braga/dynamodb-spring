@@ -7,10 +7,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,6 +33,17 @@ public class ColunaRepository {
 
     public Optional<Coluna> findById(String id) {
         return Optional.ofNullable(mapper.load(Coluna.class, id, "COLUNA"));
+    }
+
+    public List<Coluna> findByPartialId(String id) {
+        Map<String, AttributeValue> eav = new HashMap<>();
+        eav.put(":id", new AttributeValue().withS(id));
+
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                .withFilterExpression("contains(id, :id) and id <> :id")
+                .withExpressionAttributeValues(eav);
+
+        return mapper.scan(Coluna.class, scanExpression);
     }
 
     public void delete(Coluna entity) {

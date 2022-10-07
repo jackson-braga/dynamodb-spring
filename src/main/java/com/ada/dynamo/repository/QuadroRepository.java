@@ -15,7 +15,6 @@ public class QuadroRepository {
     private final DynamoDBMapper mapper;
 
     public Quadro save(Quadro quadro) {
-        quadro.setId(UUID.randomUUID().toString());
         mapper.save(quadro);
         return quadro;
     }

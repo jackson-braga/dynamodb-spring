@@ -40,9 +40,10 @@ public class QuadroService implements ServiceContract<QuadroRequest, QuadroRespo
         return quadroResponses;
      }
 
-    public QuadroResponse create(QuadroRequest request) {
-        var quadro = repository.save(mapToModel(request));
-
+    public QuadroResponse create(QuadroRequest quadroRequest) {
+        Quadro quadroModel = mapToModel(quadroRequest);
+        quadroModel.setId(UUID.randomUUID().toString());
+        Quadro quadro = repository.save(quadroModel);
         return mapToResponse(quadro);
     }
 
@@ -58,21 +59,22 @@ public class QuadroService implements ServiceContract<QuadroRequest, QuadroRespo
 
     @Override
     public QuadroResponse update(QuadroRequest quadroRequest, String id) {
-        repository.findById(id);
+        findModelById(id);
         Quadro quadroModel = mapToModel(quadroRequest);
         quadroModel.setId(id);
         return mapToResponse(repository.put(quadroModel));
     }
 
     private QuadroResponse mapToResponse(Quadro quadro) {
-        var quadroResponse = new QuadroResponse();
+        QuadroResponse quadroResponse = new QuadroResponse();
         BeanUtils.copyProperties(quadro, quadroResponse);
         return quadroResponse;
     }
     
     private Quadro mapToModel(QuadroRequest request) {
-        var quadro = new Quadro();
+        Quadro quadro = new Quadro();
         BeanUtils.copyProperties(request, quadro);
+        quadro.setTipo("QUADRO");
         return quadro;
     }
 }

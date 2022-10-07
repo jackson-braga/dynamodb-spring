@@ -2,10 +2,10 @@ package com.ada.dynamo.service;
 
 import com.ada.dynamo.dto.request.TarefaRequest;
 import com.ada.dynamo.dto.response.TarefaResponse;
+import com.ada.dynamo.exception.ItemComAssociassaoException;
 import com.ada.dynamo.exception.ItemNaoEncontradoException;
 import com.ada.dynamo.model.CartaoTarefa;
 import com.ada.dynamo.model.Tarefa;
-import com.ada.dynamo.repository.CartaoTarefaRepository;
 import com.ada.dynamo.repository.TarefaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,9 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
     @Override
     public TarefaResponse create(TarefaRequest tarefaRequest) {
-        Tarefa tarefa = repository.save(mapToModel(tarefaRequest));
+        Tarefa tarefaModel = mapToModel(tarefaRequest);
+        tarefaModel.setId(UUID.randomUUID().toString());
+        Tarefa tarefa = repository.save(tarefaModel);
         return mapToResponse(tarefa);
     }
 
@@ -51,13 +54,18 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
     @Override
     public void delete(String id) {
-        var tarefa = findModelById(id);
+        List<CartaoTarefa> partial = repository.findByPartialId(id);
+        if (!partial.isEmpty()) {
+            throw new ItemComAssociassaoException(String.format("O id %s está associado a outros itens e não pode ser deletado", id));
+        }
+
+        Tarefa tarefa = findModelById(id);
         repository.delete(tarefa);
     }
 
     @Override
     public TarefaResponse update(TarefaRequest tarefaRequest, String id) {
-        repository.findById(id);
+        findModelById(id);
         Tarefa tarefaModel = mapToModel(tarefaRequest);
         tarefaModel.setId(id);
         return mapToResponse(repository.put(tarefaModel));
@@ -65,13 +73,13 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
 
 
     private TarefaResponse mapToResponse(Tarefa tarefa) {
-        var tarefaResponse = new TarefaResponse();
+        TarefaResponse tarefaResponse = new TarefaResponse();
         BeanUtils.copyProperties(tarefa, tarefaResponse);
         return tarefaResponse;
     }
 
     private Tarefa mapToModel(TarefaRequest tarefaRequest) {
-        var tarefa = new Tarefa();
+        Tarefa tarefa = new Tarefa();
         BeanUtils.copyProperties(tarefaRequest, tarefa);
         return tarefa;
     }

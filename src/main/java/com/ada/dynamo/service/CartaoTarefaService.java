@@ -48,12 +48,14 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
     }
 
     @Override
-    public CartaoTarefaResponse create(CartaoTarefaRequest request) {
-        colunaService.findModelById(request.getColunaId());
-        Tarefa tarefa = tarefaService.findModelById(request.getTarefaId());
+    public CartaoTarefaResponse create(CartaoTarefaRequest cartaoTarefaRequest) {
+        colunaService.findModelById(cartaoTarefaRequest.getColunaId());
+        Tarefa tarefa = tarefaService.findModelById(cartaoTarefaRequest.getTarefaId());
 
         CartaoTarefa cartaoTarefaModel = mapToModel(tarefa);
-        CartaoTarefa cartaoTarefa = repository.save(request.getColunaId(), request.getTarefaId(), cartaoTarefaModel);
+        CartaoTarefa cartaoTarefa = repository.save(
+                cartaoTarefaRequest.getColunaId(), cartaoTarefaRequest.getTarefaId(), cartaoTarefaModel
+        );
         return mapToResponse(cartaoTarefa);
     }
 
