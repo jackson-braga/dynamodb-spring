@@ -20,11 +20,6 @@ public class TarefaRepository {
         return tarefa;
     }
 
-    public Tarefa put(Tarefa tarefa) {
-        mapper.save(tarefa);
-        return tarefa;
-    }
-
     public Optional<Tarefa> findById(String id) {
         return Optional.ofNullable(mapper.load(Tarefa.class, id));
     }

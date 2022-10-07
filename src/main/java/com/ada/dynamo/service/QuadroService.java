@@ -62,7 +62,7 @@ public class QuadroService implements ServiceContract<QuadroRequest, QuadroRespo
         findModelById(id);
         Quadro quadroModel = mapToModel(quadroRequest);
         quadroModel.setId(id);
-        return mapToResponse(repository.put(quadroModel));
+        return mapToResponse(repository.save(quadroModel));
     }
 
     private QuadroResponse mapToResponse(Quadro quadro) {

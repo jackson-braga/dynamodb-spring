@@ -68,7 +68,7 @@ public class TarefaService implements ServiceContract<TarefaRequest, TarefaRespo
         findModelById(id);
         Tarefa tarefaModel = mapToModel(tarefaRequest);
         tarefaModel.setId(id);
-        return mapToResponse(repository.put(tarefaModel));
+        return mapToResponse(repository.save(tarefaModel));
     }
 
 

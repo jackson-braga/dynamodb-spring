@@ -18,10 +18,6 @@ public class QuadroRepository {
         mapper.save(quadro);
         return quadro;
     }
-    public Quadro put(Quadro quadro) {
-        mapper.save(quadro);
-        return quadro;
-    }
 
     public Iterable<Quadro> findAll() {
         Map<String, AttributeValue> eav = new HashMap<>();
