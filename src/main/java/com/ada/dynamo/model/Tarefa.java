@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @DynamoDBTable(tableName = "tarefas")
-public class Tarefa implements DynamoDBEntity {
+public class Tarefa {
 
     @DynamoDBHashKey
     private String id;

@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @DynamoDBTable(tableName = "quadros")
-public class Coluna implements DynamoDBEntity {
+public class Coluna {
 
     @DynamoDBHashKey
     private String id;
