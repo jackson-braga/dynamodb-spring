@@ -1,7 +1,6 @@
 package com.ada.dynamo.service;
 
 import com.ada.dynamo.dto.request.CartaoTarefaRequest;
-import com.ada.dynamo.dto.request.TarefaRequest;
 import com.ada.dynamo.dto.response.CartaoTarefaResponse;
 import com.ada.dynamo.dto.response.TarefaResponse;
 import com.ada.dynamo.exception.ItemNaoEncontradoException;
@@ -14,10 +13,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -105,12 +102,6 @@ public class CartaoTarefaService implements  ServiceContract<CartaoTarefaRequest
             cartaoTarefaRequest.setColunaId(colunaId);
             create(cartaoTarefaRequest);
         }
-    }
-
-    public CartaoTarefaRequest mapToRequest(CartaoTarefa model) {
-        var cartaoTarefaRequest = new CartaoTarefaRequest();
-        BeanUtils.copyProperties(model, cartaoTarefaRequest);
-        return cartaoTarefaRequest;
     }
 
     private CartaoTarefaResponse mapToResponse(CartaoTarefa model) {
